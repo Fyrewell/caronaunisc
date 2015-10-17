@@ -28,4 +28,12 @@
     <string name="action_map">Rota</string>
     <string name="action_agenda">Agenda</string>
     <string name="title_activity_agenda">Agenda</string>
+    <string name="title_activity_configura_dia">Configurar Dia</string>
+    <string name="label_tipo_ag">Tipo</string>
+    <string name="label_turno">Turno</string>
+    <string name="label_manha">Manhã</string>
+    <string name="label_tarde">Tarde</string>
+    <string name="label_noite">Noite</string>
+    <string name="label_qtde_passageiros">Quantidade lugares</string>
+
 </resources>

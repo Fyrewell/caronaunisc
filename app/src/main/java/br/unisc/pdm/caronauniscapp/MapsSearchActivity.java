@@ -131,8 +131,8 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
                                 markerDest = mMap.addMarker(
                                         new MarkerOptions().position(new LatLng(LatLongObj.getDouble("lat"), LatLongObj.getDouble("lng")))
                                                 .title(locSel)
-                                                .draggable(true)
-                                                .snippet("Segure e arraste para ajustar.")
+                                                //.draggable(true)
+                                                //.snippet("Segure e arraste para ajustar.")
                                 );
                             }else{
                                 markerDest.setPosition(new LatLng(LatLongObj.getDouble("lat"), LatLongObj.getDouble("lng")));
@@ -177,8 +177,9 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
         markerDest = mMap.addMarker(
                 new MarkerOptions().position(new LatLng(lat, lng))
                         .title(locDest)
-                        .draggable(true)
-                        .snippet("Segure e arraste para ajustar."));
+                        //.draggable(true)
+                        //.snippet("Segure e arraste para ajustar.")
+                        );
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
 
         EditText et = (EditText) findViewById(R.id.inpDestSearch);

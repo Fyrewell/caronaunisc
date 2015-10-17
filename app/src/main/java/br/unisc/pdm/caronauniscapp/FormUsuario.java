@@ -27,7 +27,7 @@ import br.unisc.pdm.caronauniscapp.webservice.UsuarioWebDao;
  */
 public class FormUsuario extends ActionBarActivity implements UsuarioTela {
     private UsuarioDAO dao;
-
+    private String matricula = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,26 +37,21 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
 
         Intent rcv = getIntent();
         Bundle extras = rcv.getExtras();
-        String mat = "";
+
         if (extras!=null) {
-            mat = extras.getString("matricula");
+            matricula = extras.getString("matricula");
         }
 
-        Log.d("MAT", "buscou o matricula " + mat);
+        Log.d("MAT", "buscou o matricula " + matricula);
 
         dao = new UsuarioDAO(this);
         dao.open();
 
 
-        if (!mat.equals("")) {
-            if(Usuario.STORE_MODE.equals("DB")) {
-                //Usuario p = dao.getUsuarioById(mat);
-                //populaTela(p);
-            }else{
-                UsuarioWebDao webservice = new UsuarioWebDao(this);
-                webservice.getUsuarioByMat(mat);
-                Toast.makeText(this, "Deve buscar na web!", Toast.LENGTH_SHORT).show();
-            }
+        if (!matricula.equals("")) {
+            UsuarioWebDao webservice = new UsuarioWebDao(this);
+            webservice.getUsuarioByMat(matricula);
+            Toast.makeText(this, "Deve buscar na web!", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -106,6 +101,11 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
         if(rb_receber.isChecked()) ctipo = 2;
         if(rb_ambos.isChecked()) ctipo = 3;
 
+        if (edit_id.equals("")||edit_matricula.equals("")||edit_nome.equals("")||edit_senha.equals("")||rb_masc.equals("")||ctipo==0){
+            Toast.makeText(this,"Entrar com todos os dados!",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Usuario person = new Usuario();
 
         if(edit_id.getText().toString().length() > 0)
@@ -117,20 +117,14 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
         person.setSexo(sexo);
         person.setCadastroTipo(ctipo);
 
-        if(Usuario.STORE_MODE.equals("DB")){
-            /*if(person.getId() > 0)
-                dao.updateUsuario(person);
-            else
-                dao.insertUsuario(person);*/
+        Toast.makeText(this,"Deve gravar na web!",Toast.LENGTH_SHORT).show();
+        UsuarioWebDao webservice = new UsuarioWebDao(this);
+        if(!matricula.equals("")){
+            webservice.editUsuario(person);
         }else{
-            Toast.makeText(this,"Deve gravar na web!",Toast.LENGTH_SHORT).show();
-            UsuarioWebDao webservice = new UsuarioWebDao(this);
-            if(person.getMatricula() > 0){
-                webservice.editUsuario(person);
-            }else{
-                webservice.insertUsuario(person);
-            }
+            webservice.insertUsuario(person);
         }
+
         finish();
 
     }
