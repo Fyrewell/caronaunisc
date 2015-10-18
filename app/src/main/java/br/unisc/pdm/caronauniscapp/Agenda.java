@@ -25,6 +25,7 @@ public class Agenda extends ActionBarActivity implements AgendaTela {
     private AgendaWebDao dao = new AgendaWebDao(this);
     private String mat = "";
     int diaClicado = 0;
+    int usuariotipo = 0;
     private GridView gridview;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class Agenda extends ActionBarActivity implements AgendaTela {
         Intent cfgDia = new Intent(this, configuraDia.class);
         cfgDia.putExtra("VALUE_DIA_SEMANA", Integer.toString(dia));
         cfgDia.putExtra("matricula", this.mat);
+        cfgDia.putExtra("usuariotipo", this.usuariotipo);
         this.startActivityForResult(cfgDia, 1);
     }
 
@@ -106,6 +108,7 @@ public class Agenda extends ActionBarActivity implements AgendaTela {
             }catch(JSONException e){
             }
         }
+        usuariotipo = tipo;
         gridview.setAdapter(imgAdp);
     }
 
@@ -202,7 +205,6 @@ public class Agenda extends ActionBarActivity implements AgendaTela {
 
     public int getImgQtd(int qtd){
         switch(qtd){
-            case 0: return R.drawable.qtde;
             case 1: return R.drawable.ag1;
             case 2: return R.drawable.ag2;
             case 3: return R.drawable.ag3;

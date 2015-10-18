@@ -1,17 +1,24 @@
 package br.unisc.pdm.caronauniscapp;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 
 public class Home extends ActionBarActivity {
     String mat = "";
+    String sexo = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +30,13 @@ public class Home extends ActionBarActivity {
         Bundle extras = rcv.getExtras();
         if (extras!=null) {
             Log.d("testReceb", extras.getString("matricula"));
+            Log.d("testReceb", extras.getString("sexo"));
+            mat = extras.getString("matricula");
+            sexo = extras.getString("sexo");
+            if (sexo.equals("Feminino")) {
+                ImageButton btn = (ImageButton)findViewById(R.id.btn_open_voce);
+                btn.setImageResource(R.drawable.icon_open_vocef);
+            }
         }
     }
 
@@ -44,31 +58,39 @@ public class Home extends ActionBarActivity {
 //        if (id == R.id.action_list) {
 //            startActivity(new Intent(this,ListViewLoader.class));
 //        }
-        Intent rcv = getIntent();
-        Bundle extras = rcv.getExtras();
 
-        if (extras!=null) {
-            mat = extras.getString("matricula");
-        }
         if (id == R.id.action_cadastro) {
-            Intent formAct = new Intent(this,FormUsuario.class);
-            formAct.putExtra("matricula",mat);
-            startActivity(formAct);
+            openVoce(findViewById(R.id.action_cadastro));
         }
 
         if (id == R.id.action_map) {
-            Intent mapAct = new Intent(this,MapsSearchActivity.class);
-            mapAct.putExtra("matricula",mat);
-            startActivity(mapAct);
+            openRota(findViewById(R.id.action_map));
         }
 
         if (id == R.id.action_agenda) {
-            Intent agAct = new Intent(this,Agenda.class);
-            agAct.putExtra("matricula",mat);
-            this.startActivityForResult(agAct, 1);
+            openAgenda(findViewById(R.id.action_agenda));
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void openVoce(View v){
+        Intent formAct = new Intent(this,FormUsuario.class);
+        formAct.putExtra("matricula",mat);
+        startActivity(formAct);
+    }
+    public void openRota(View v){
+        Intent mapAct = new Intent(this,MapsSearchActivity.class);
+        mapAct.putExtra("matricula",mat);
+        startActivity(mapAct);
+    }
+    public void openAgenda(View v){
+        Intent agAct = new Intent(this,Agenda.class);
+        agAct.putExtra("matricula",mat);
+        this.startActivityForResult(agAct, 1);
+    }
+    public void deslogar(View v){
+        finish();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

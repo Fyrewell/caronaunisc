@@ -148,6 +148,15 @@ public class UsuarioWebDao {
                     public void onResponse(JSONObject response){
                         Log.d("WBS", "Retornou do request!");
                         Log.d("WBS", response.toString());
+                        try {
+                            Log.d("WBS", response.getString("result"));
+                            if (response.getString("result").equals("Alterado com sucesso!")) {
+                                Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();
+                            }
+                        }catch(JSONException e){
+                        }
                     }
 
                 }, new Response.ErrorListener() {
@@ -240,6 +249,7 @@ public class UsuarioWebDao {
                             if (response.getString("result").equals("Logado com sucesso!")) {
                                 Intent home = new Intent(context, Home.class);
                                 home.putExtra("matricula",jsonBody.getString("matricula"));
+                                home.putExtra("sexo",response.getJSONObject("dados").getString("sexo"));
                                 context.startActivity(home);
                             } else {
                                 Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();

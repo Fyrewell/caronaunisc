@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ public class configuraDia extends ActionBarActivity implements AgendaTela {
     private AgendaWebDao dao = new AgendaWebDao(this);
     private String mat = "";
     private String dia_click = "";
-
+    private int usuariotipo = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,10 +36,69 @@ public class configuraDia extends ActionBarActivity implements AgendaTela {
         if (extras!=null) {
             mat = extras.getString("matricula");
             dia_click = extras.getString("VALUE_DIA_SEMANA");
+            usuariotipo = extras.getInt("usuariotipo");
+            Log.d("usuariotipo",Integer.toString(usuariotipo));
             labelarDia();
-            wsSearchDia();
         }
+
+        RadioButton rbrec = (RadioButton) findViewById(R.id.radio_receber);
+        RadioButton rbdar = (RadioButton) findViewById(R.id.radio_dar);
+        if (usuariotipo == 1){
+            rbrec.setVisibility(View.INVISIBLE);
+        }else if (usuariotipo == 2){
+            RadioButton qtd1 = (RadioButton) findViewById(R.id.radio_carona_qtd1);
+            RadioButton qtd2 = (RadioButton) findViewById(R.id.radio_carona_qtd2);
+            RadioButton qtd3 = (RadioButton) findViewById(R.id.radio_carona_qtd3);
+            RadioButton qtd4 = (RadioButton) findViewById(R.id.radio_carona_qtd4);
+            TextView txtqtd = (TextView) findViewById(R.id.txt_qtd_passageiros);
+            rbdar.setVisibility(View.INVISIBLE);
+            qtd1.setVisibility(View.INVISIBLE);
+            qtd2.setVisibility(View.INVISIBLE);
+            qtd3.setVisibility(View.INVISIBLE);
+            qtd4.setVisibility(View.INVISIBLE);
+            txtqtd.setVisibility(View.INVISIBLE);
+            txtqtd.setText("");
+        }
+
+        rbrec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RadioButton qtd1 = (RadioButton) findViewById(R.id.radio_carona_qtd1);
+                RadioButton qtd2 = (RadioButton) findViewById(R.id.radio_carona_qtd2);
+                RadioButton qtd3 = (RadioButton) findViewById(R.id.radio_carona_qtd3);
+                RadioButton qtd4 = (RadioButton) findViewById(R.id.radio_carona_qtd4);
+                TextView txtqtd = (TextView) findViewById(R.id.txt_qtd_passageiros);
+                qtd1.setVisibility(View.INVISIBLE);
+                qtd2.setVisibility(View.INVISIBLE);
+                qtd3.setVisibility(View.INVISIBLE);
+                qtd4.setVisibility(View.INVISIBLE);
+                txtqtd.setVisibility(View.INVISIBLE);
+                qtd1.setChecked(false);
+                qtd2.setChecked(false);
+                qtd3.setChecked(false);
+                qtd4.setChecked(false);
+            }
+        });
+
+        rbdar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView txtqtd = (TextView) findViewById(R.id.txt_qtd_passageiros);
+                RadioButton qtd1 = (RadioButton) findViewById(R.id.radio_carona_qtd1);
+                RadioButton qtd2 = (RadioButton) findViewById(R.id.radio_carona_qtd2);
+                RadioButton qtd3 = (RadioButton) findViewById(R.id.radio_carona_qtd3);
+                RadioButton qtd4 = (RadioButton) findViewById(R.id.radio_carona_qtd4);
+                qtd1.setVisibility(View.VISIBLE);
+                qtd2.setVisibility(View.VISIBLE);
+                qtd3.setVisibility(View.VISIBLE);
+                qtd4.setVisibility(View.VISIBLE);
+                txtqtd.setVisibility(View.VISIBLE);
+            }
+        });
+
     }
+
+
 
     public void labelarDia(){
         TextView et = (TextView) findViewById(R.id.cfgdia_data_titulo);
@@ -117,7 +177,7 @@ public class configuraDia extends ActionBarActivity implements AgendaTela {
         if(rb_qtd4.isChecked()) qtd = 4;
 
 
-        if (turno.equals("")||ctipo==0||qtd==0){
+        if (ctipo==0||(ctipo==1&&(turno.equals("")||ctipo==0||qtd==0))||(ctipo==2&&(turno.equals("")||ctipo==0))){
             Toast.makeText(this, "Entrar com todos os dados!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -167,6 +227,7 @@ public class configuraDia extends ActionBarActivity implements AgendaTela {
         Intent intent = new Intent();
         intent.putExtra("matricula",mat);
         intent.putExtra("diaatualiza",dia_click);
+        intent.putExtra("usuariotipo",usuariotipo);
         setResult(RESULT_OK, intent);
         finish();
     }

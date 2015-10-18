@@ -51,7 +51,6 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
         if (!matricula.equals("")) {
             UsuarioWebDao webservice = new UsuarioWebDao(this);
             webservice.getUsuarioByMat(matricula);
-            Toast.makeText(this, "Deve buscar na web!", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -117,7 +116,6 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
         person.setSexo(sexo);
         person.setCadastroTipo(ctipo);
 
-        Toast.makeText(this,"Deve gravar na web!",Toast.LENGTH_SHORT).show();
         UsuarioWebDao webservice = new UsuarioWebDao(this);
         if(!matricula.equals("")){
             webservice.editUsuario(person);
@@ -156,7 +154,6 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
     public void popularView(List<Usuario> values) {
         populaTela(values.get(0));
         Log.d("WBS", values.toString());
-        Toast.makeText(this,"Voltou.. populando!",Toast.LENGTH_SHORT).show();
     }
 
     public void cadastrar(View v)
