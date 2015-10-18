@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 
 public class Home extends ActionBarActivity {
-
+    String mat = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +46,7 @@ public class Home extends ActionBarActivity {
 //        }
         Intent rcv = getIntent();
         Bundle extras = rcv.getExtras();
-        String mat = "";
+
         if (extras!=null) {
             mat = extras.getString("matricula");
         }
@@ -65,9 +65,19 @@ public class Home extends ActionBarActivity {
         if (id == R.id.action_agenda) {
             Intent agAct = new Intent(this,Agenda.class);
             agAct.putExtra("matricula",mat);
-            startActivity(agAct);
+            this.startActivityForResult(agAct, 1);
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                mat = data.getStringExtra("matricula");
+            }
+        }
+    }
+
 }

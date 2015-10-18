@@ -13,6 +13,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+
 import br.unisc.pdm.caronauniscapp.webservice.AgendaTela;
 import br.unisc.pdm.caronauniscapp.webservice.AgendaWebDao;
 
@@ -76,6 +78,16 @@ public class configuraDia extends ActionBarActivity implements AgendaTela {
         if(id == R.id.action_accept_dia){
             gravarDiaAgenda();
             return true;
+        }else if (id == R.id.action_exclui_dia) {
+            dao.clrAgendaDia(mat, dia_click);
+            return true;
+        }else if (id == android.R.id.home){
+            Intent intent = new Intent();
+            intent.putExtra("matricula",mat);
+            intent.putExtra("diaatualiza",dia_click);
+            setResult(RESULT_OK, intent);
+            finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -110,16 +122,52 @@ public class configuraDia extends ActionBarActivity implements AgendaTela {
             return;
         }
 
-        dao.setAgendaDia(mat,dia_click,ctipo,turno,qtd);
-        finish();
+        dao.setAgendaDia(mat, dia_click, ctipo, turno, qtd);
+
     }
 
-    public void agendaAllItens(){
+    public void agendaAllItens(int tipo, JSONArray agItens){
     }
 
-    public void agendaItem(String dataF){
+    public void agendaItem(String dataF, int tipo, String turno, int qtd){
+        Log.d("CHEGOUWS", dataF);
+
         TextView et = (TextView) findViewById(R.id.cfgdia_data_titulo);
         et.setText(et.getText()+" - "+dataF);
-        Log.d("CHEGOUWS",dataF);
+        RadioButton rb_dar = (RadioButton) findViewById(R.id.radio_dar);
+        RadioButton rb_receber = (RadioButton) findViewById(R.id.radio_receber);
+        RadioButton rb_manha = (RadioButton) findViewById(R.id.radio_manha);
+        RadioButton rb_tarde = (RadioButton) findViewById(R.id.radio_tarde);
+        RadioButton rb_noite = (RadioButton) findViewById(R.id.radio_noite);
+        RadioButton rb_qtd1 = (RadioButton) findViewById(R.id.radio_carona_qtd1);
+        RadioButton rb_qtd2 = (RadioButton) findViewById(R.id.radio_carona_qtd2);
+        RadioButton rb_qtd3 = (RadioButton) findViewById(R.id.radio_carona_qtd3);
+        RadioButton rb_qtd4 = (RadioButton) findViewById(R.id.radio_carona_qtd4);
+        if(turno.equals("M"))
+            rb_manha.setChecked(true);
+        if(turno.equals("T"))
+            rb_tarde.setChecked(true);
+        if(turno.equals("N"))
+            rb_noite.setChecked(true);
+        if(tipo==1)
+            rb_dar.setChecked(true);
+        if(tipo==2)
+            rb_receber.setChecked(true);
+        if(qtd==1)
+            rb_qtd1.setChecked(true);
+        if(qtd==2)
+            rb_qtd2.setChecked(true);
+        if(qtd==3)
+            rb_qtd3.setChecked(true);
+        if(qtd==4)
+            rb_qtd4.setChecked(true);
+    }
+
+    public void setAgendaDia_callback(){
+        Intent intent = new Intent();
+        intent.putExtra("matricula",mat);
+        intent.putExtra("diaatualiza",dia_click);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

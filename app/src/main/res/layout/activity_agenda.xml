@@ -27,4 +27,13 @@
         android:id="@+id/textView5"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Copiar Roteiro da Semana Passada"
+        android:id="@+id/button7"
+        android:layout_alignBottom="@+id/gridview"
+        android:layout_centerHorizontal="true"
+        android:onClick="copiarRoteiroSemanaPassada"/>
 </RelativeLayout>

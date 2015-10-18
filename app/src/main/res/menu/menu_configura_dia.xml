@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="br.unisc.pdm.caronauniscapp.FormPessoa">
 
+    <item android:id="@+id/action_exclui_dia"
+        android:title="@string/action_accept_pessoa"
+        android:icon="@drawable/ic_action_exclui"
+        android:orderInCategory="20"
+        app:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_accept_dia"
         android:title="@string/action_accept_pessoa"

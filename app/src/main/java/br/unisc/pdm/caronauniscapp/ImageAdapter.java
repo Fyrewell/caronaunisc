@@ -12,7 +12,6 @@ import android.widget.ImageView;
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private int cItem = 0;
 
     public ImageAdapter(Context c) {
         mContext = c;
@@ -36,7 +35,7 @@ public class ImageAdapter extends BaseAdapter {
         //if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            if (cItem<9) {
+            if (position<7) {
                 imageView.setLayoutParams(new GridView.LayoutParams(70, 58));
             }else{
                 imageView.setLayoutParams(new GridView.LayoutParams(62, 58));
@@ -46,27 +45,26 @@ public class ImageAdapter extends BaseAdapter {
         //} else {
         //    imageView = (ImageView) convertView;
         //}
-        cItem++;
         imageView.setImageResource(mThumbIds[position]);
         return imageView;
     }
 
     // references to our images
-    private Integer[] mThumbIds = {
+    public Integer[] mThumbIds = {
             R.drawable.dom, R.drawable.seg,
             R.drawable.ter, R.drawable.qua,
             R.drawable.qui, R.drawable.sex,
             R.drawable.sab,
-            R.drawable.agdar, R.drawable.tipo,
-            R.drawable.agrec, R.drawable.tipo,
+            R.drawable.tipo, R.drawable.tipo,
+            R.drawable.tipo, R.drawable.tipo,
             R.drawable.tipo, R.drawable.tipo,
             R.drawable.tipo,
-            R.drawable.agm, R.drawable.turno,
-            R.drawable.agt, R.drawable.turno,
+            R.drawable.turno, R.drawable.turno,
+            R.drawable.turno, R.drawable.turno,
             R.drawable.turno, R.drawable.turno,
             R.drawable.turno,
-            R.drawable.ag1, R.drawable.qtde,
-            R.drawable.agblank, R.drawable.qtde,
+            R.drawable.qtde, R.drawable.qtde,
+            R.drawable.qtde, R.drawable.qtde,
             R.drawable.qtde, R.drawable.qtde,
             R.drawable.qtde
     };
