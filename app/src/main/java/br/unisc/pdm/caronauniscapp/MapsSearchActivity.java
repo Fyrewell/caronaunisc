@@ -1,11 +1,9 @@
 package br.unisc.pdm.caronauniscapp;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -32,6 +30,10 @@ import java.net.URLEncoder;
 import br.unisc.pdm.caronauniscapp.webservice.RotaTela;
 import br.unisc.pdm.caronauniscapp.webservice.RotaWebDao;
 
+/**
+ * Metodos usados para a manipulacao do mapa e da rota, setando o mapa,
+ * buscando o ponto que o usuario marcar e salvando a rota marcada.
+ */
 public class MapsSearchActivity extends FragmentActivity implements RotaTela{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
@@ -82,6 +84,8 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
      * just add a marker near Africa.
      * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
+     *
+     * Configuracao inicial do mapa, marcando UNISC como ponto fixo de destino.
      */
     private void setUpMap() {
         Log.d("AA", "mark");
@@ -105,6 +109,15 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
 
     }
 
+    /**
+     * Obtem o ponto no plano cartesiano (lat,long) que representa o local marcado pelo usuario.
+     *
+     * PS: se marcado ponto em SCS, basta colocar o nome da rua, para localizacoes em outras cidades
+     * precisa-se colocar endereco completo para marcar corretamente.
+     *
+     * @param local
+     * @return
+     */
     public boolean getLatLangByLocationString(String local){
         String loc = "";
         try {
@@ -157,6 +170,10 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
         return true;
     }
 
+    /**
+     * Grava ponto de partida para a rota ate a UNISC marcada pelo usuario
+     * @param v
+     */
     public void gravarDestino(View v){
         LatLng latlng = markerDest.getPosition();
         String locDest = markerDest.getTitle();

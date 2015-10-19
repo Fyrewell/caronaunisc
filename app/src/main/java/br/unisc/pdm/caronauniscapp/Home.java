@@ -1,21 +1,20 @@
 package br.unisc.pdm.caronauniscapp;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
-
+/**
+ * Activity inicial apos feito o login no aplicativo.
+ * Acesso a todas as funcionalidades atraves de shortcuts para perfil, agenda ou rota.
+ */
 public class Home extends ActionBarActivity {
     String mat = "";
     String sexo = "";

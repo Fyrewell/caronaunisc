@@ -3,13 +3,12 @@ package br.unisc.pdm.caronauniscapp;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +18,16 @@ import org.json.JSONArray;
 import br.unisc.pdm.caronauniscapp.webservice.AgendaTela;
 import br.unisc.pdm.caronauniscapp.webservice.AgendaWebDao;
 
+/**
+ * Usuario eh presentado para a marcacao da agenda de caronas, onde podra selecionar os dias
+ * para a atual semana para quando podera disponibilizar carona ou para quando precisa de de carona,
+ * informando o dia e turno para cada situacao.
+ *
+ * Usuarios que irao disponibilizar carona devem informar tbm o numero de lugares disponiveis.
+ *
+ * Usuario tem tambem a opcao de copiar a agenda da semana anteerior para repetir as mesmas
+ * marcacoes ja feitas anteriormente.
+ */
 public class configuraDia extends ActionBarActivity implements AgendaTela {
     private AgendaWebDao dao = new AgendaWebDao(this);
     private String mat = "";

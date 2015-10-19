@@ -2,14 +2,16 @@ package br.unisc.pdm.caronauniscapp;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import br.unisc.pdm.caronauniscapp.R;
-
+/**
+ * Activity inicial, responsavel por chamar tela de Login caso usuario ja tenha se cadastrado
+ * ou Tela de input de dados do usuario para cadastro.
+ *
+ */
 public class Lauch extends Activity {
 
     @Override

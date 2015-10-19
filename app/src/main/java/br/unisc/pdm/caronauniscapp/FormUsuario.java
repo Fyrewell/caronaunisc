@@ -1,7 +1,5 @@
 package br.unisc.pdm.caronauniscapp;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -23,6 +21,8 @@ import br.unisc.pdm.caronauniscapp.webservice.UsuarioTela;
 import br.unisc.pdm.caronauniscapp.webservice.UsuarioWebDao;
 
 /**
+ * Recebe informacoes da tela de informacoes de usuario para a criacao ou edicao de um perfil.
+ *
  * Created by Diego on 05/10/2015.
  */
 public class FormUsuario extends ActionBarActivity implements UsuarioTela {
@@ -81,6 +81,10 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
 
     }
 
+    /**
+     * Captura os dados informados pelo usuario e edita seu perfil caso usuario ja exista,
+     * ou realiza seu cadastro caso seja novo usuario.
+     */
     public void insertOrEditPerson(){
         //Buscando dados de entrada digitados pelo usuario
         EditText edit_id = (EditText) findViewById(R.id.edit_id);

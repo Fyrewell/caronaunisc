@@ -1,6 +1,14 @@
 package br.unisc.pdm.caronauniscapp.database;
 
 /**
+ * Usuario cadastrado no aplicativo.
+ *
+ * Tipo do usuario pode ser:
+ * 1 - usuario pode dar carona
+ * 2 - usuario precisa receber carona
+ * 3 - usuario pode tanto dar carona, como pode disponibilizar carona
+ *      (diferente agenda para diferentes dias)
+ *
  * Created by Diego on 05/10/2015.
  */
 public class Usuario {

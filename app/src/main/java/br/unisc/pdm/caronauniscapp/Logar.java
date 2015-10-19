@@ -1,8 +1,6 @@
 package br.unisc.pdm.caronauniscapp;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,11 +9,13 @@ import android.widget.EditText;
 
 import java.util.List;
 
-import br.unisc.pdm.caronauniscapp.R;
 import br.unisc.pdm.caronauniscapp.database.Usuario;
 import br.unisc.pdm.caronauniscapp.webservice.UsuarioTela;
 import br.unisc.pdm.caronauniscapp.webservice.UsuarioWebDao;
 
+/**
+ * Recebe login (matricula) e senha de usuario ja cadastrado e realiza o login no aplicativo.
+ */
 public class Logar extends Activity implements UsuarioTela {
 
     @Override

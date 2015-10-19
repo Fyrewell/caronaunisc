@@ -15,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
+ * Metodos webservice para os servicos relativos a agendamento de caronas.
+ *
  * Created by Diego on 17/10/2015.
  */
 public class AgendaWebDao {

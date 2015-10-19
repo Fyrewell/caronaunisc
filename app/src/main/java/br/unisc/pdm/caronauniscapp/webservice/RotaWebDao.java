@@ -1,7 +1,6 @@
 package br.unisc.pdm.caronauniscapp.webservice;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,13 +14,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import br.unisc.pdm.caronauniscapp.Logar;
-import br.unisc.pdm.caronauniscapp.database.Usuario;
-
 /**
+ * Metodos webservice para gravar uma nova rota ou obter uma rota ja gravado por um usuario.
+ *
  * Created by Diego on 12/10/2015.
  */
 public class RotaWebDao {
