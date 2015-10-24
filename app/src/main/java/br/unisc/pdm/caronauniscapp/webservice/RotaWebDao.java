@@ -39,13 +39,15 @@ public class RotaWebDao {
                     public void onResponse(JSONObject response){
                         Log.d("WBS", response.toString());
                         double lat, lng;
-                        String locDest;
+                        String locDest,wps,lines;
                         try {
                             lat = response.getDouble("lat");
                             lng = response.getDouble("lng");
                             locDest = response.getString("locnome");
+                            wps = response.getString("wps");
+                            lines = response.getString("lines");
                             if (locDest.length() > 0) {
-                                tela.getPositionWs(lat, lng, locDest);
+                                tela.getPositionWs(lat, lng, locDest,wps,lines);
                             }
                         }catch(JSONException e){
                         }
@@ -63,7 +65,7 @@ public class RotaWebDao {
     }
 
 
-    public void setRotaUsuario(String mat,double lat,double lng, String locDest){
+    public void setRotaUsuario(String mat,double lat,double lng, String locDest, String wps,String linhas,String pos){
         String url = baseurl+"/rota";
         final JSONObject jsonBody = new JSONObject();
         try {
@@ -71,6 +73,9 @@ public class RotaWebDao {
             jsonBody.put("lat",lat);
             jsonBody.put("lng",lng);
             jsonBody.put("locnome",locDest);
+            jsonBody.put("wps",wps);
+            jsonBody.put("linhas",linhas);
+            jsonBody.put("positions",pos);
         } catch (JSONException e) {
             e.printStackTrace();
         }

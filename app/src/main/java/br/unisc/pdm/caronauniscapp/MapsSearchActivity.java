@@ -1,9 +1,25 @@
 package br.unisc.pdm.caronauniscapp;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
 import android.util.Log;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
+
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.List;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,18 +30,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
 
 import br.unisc.pdm.caronauniscapp.webservice.RotaTela;
 import br.unisc.pdm.caronauniscapp.webservice.RotaWebDao;
@@ -37,13 +49,26 @@ import br.unisc.pdm.caronauniscapp.webservice.RotaWebDao;
 public class MapsSearchActivity extends FragmentActivity implements RotaTela{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private int qtdMarkers = 0;
+    private List<LatLng> markers;
+    String origem = "";
     private Marker markerDest;
+    private List<String> polylinesAll;
+    private List<LatLng> positionsAll;
+    private LatLng cordDest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_maps_search);
-
         setUpMapIfNeeded();
+        Intent rcv = getIntent();
+        Bundle extras = rcv.getExtras();
+        String mat = "";
+        if (extras!=null) {
+            mat = extras.getString("matricula");
+        }
+        new RotaWebDao(this).getRotaByMat(mat);
     }
 
     @Override
@@ -51,6 +76,7 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
         super.onResume();
         setUpMapIfNeeded();
     }
+
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
@@ -84,29 +110,133 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
      * just add a marker near Africa.
      * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
-     *
-     * Configuracao inicial do mapa, marcando UNISC como ponto fixo de destino.
      */
     private void setUpMap() {
-        Log.d("AA", "mark");
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-29.697666, -52.438677)).title("UNISC"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-29.697666, -52.438677), 12));
+        addUnisc();
+        centerUnisc();
+        markers = new ArrayList<>();
+        polylinesAll = new ArrayList<>();
+        positionsAll = new ArrayList<>();
 
-        Intent rcv = getIntent();
-        Bundle extras = rcv.getExtras();
-        String mat = "";
-        if (extras!=null) {
-            mat = extras.getString("matricula");
-        }
-        new RotaWebDao(this).getRotaByMat(mat);
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if (qtdMarkers < 8) {
+                    if (!origem.equals("")) {
+                        mMap.addMarker(new MarkerOptions().position(latLng).draggable(true));
+                        qtdMarkers++;
+                        markers.add(latLng);
+                        getDirections();
+                    }
+                } else {
+                    Toast.makeText(getBaseContext(), "Limite de caminhos na rota atingido.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-
+    public void addUnisc(){
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-29.697666, -52.438677)).title("UNISC"));
+    }
+    public void centerUnisc(){
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-29.697666, -52.438677), 14));
+    }
+    public void addDest(){
+        mMap.addMarker(new MarkerOptions().position(cordDest).title(origem));
+    }
+    public void addWaypoints(){
+        for (int i = 0; i < qtdMarkers; i++) {
+            mMap.addMarker(new MarkerOptions().position(markers.get(i)));
+        }
+    }
     public void reqDestino(View v){
+        qtdMarkers = 0;
+        markers = new ArrayList<>();
+        polylinesAll = new ArrayList<>();
+        positionsAll = new ArrayList<>();
         EditText et = (EditText) findViewById(R.id.inpDestSearch);
-
         getLatLangByLocationString(et.getText().toString());
+    }
 
+    public void voltaWaypoints(View v){
+        if (qtdMarkers>0) {
+            qtdMarkers--;
+            markers.remove(qtdMarkers);
+            getDirections();
+        }
+    }
+
+    /**
+     * Obtem o ponto no plano cartesiano (lat,long) que representa o local marcado pelo usuario.
+     *
+     * PS: se marcado ponto em SCS, basta colocar o nome da rua, para localizacoes em outras cidades
+     * precisa-se colocar endereco completo para marcar corretamente.
+     *
+     * @param local
+     * @return
+     */
+    public boolean getDirections(){
+
+        String wp = "";
+        String origStr = "";
+        try {
+            origStr = URLEncoder.encode(origem, "UTF-8");
+        }catch(UnsupportedEncodingException e){
+            Toast.makeText(getBaseContext(),"Erro ao parsear url",Toast.LENGTH_SHORT).show();
+        }
+
+        if (qtdMarkers>0) {
+            int i;
+            wp = "&waypoints=optimize:true";
+            for (i = 0; i < qtdMarkers; i++) {
+                wp += "|" + markers.get(i).latitude + "," + markers.get(i).longitude;
+            }
+        }
+        String url = "https://maps.googleapis.com/maps/api/directions/json?destination=UNISC%20Santa%20Cruz%20do%20Sul&origin="+origStr+wp+"&key=AIzaSyC7uds535yTKywUfGkBgrvV2LT4MA7_2Pk";
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response){
+                        try {
+                            Log.d("retornoDirections", response.toString());
+                            Log.d("retornoDirectionsConv", response.getJSONArray("routes").getJSONObject(0).getJSONArray("legs").toString());
+                            JSONArray ar = response.getJSONArray("routes").getJSONObject(0).getJSONArray("legs");
+                            JSONArray stp;
+                            String pline = "",poslat = "",poslng = "";
+                            List<LatLng> decodedPath;
+                            mMap.clear();
+                            addUnisc();
+                            addDest();
+                            polylinesAll = new ArrayList<>();
+                            for (int j=0;j<ar.length();j++){
+                                stp = ar.getJSONObject(j).getJSONArray("steps");
+                                for (int k=0;k<stp.length();k++){
+                                    pline = stp.getJSONObject(k).getJSONObject("polyline").getString("points");
+                                    poslat = stp.getJSONObject(k).getJSONObject("start_location").getString("lat");
+                                    poslng = stp.getJSONObject(k).getJSONObject("start_location").getString("lng");
+                                    polylinesAll.add(pline);
+                                    positionsAll.add((new LatLng(Double.parseDouble(poslat),Double.parseDouble(poslng))));
+                                    decodedPath = PolyUtil.decode(pline);
+                                    mMap.addPolyline(new PolylineOptions().addAll(decodedPath).width(4).color(Color.BLUE - 0x77000000));
+                                }
+                            }
+                        }catch (JSONException j){
+
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        Toast.makeText(getBaseContext(),"Problema ao executar sua solicitacao",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        RequestQueue queue = Volley.newRequestQueue(getBaseContext());
+        queue.add(jsObjRequest);
+        return true;
     }
 
     /**
@@ -126,7 +256,6 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
             Toast.makeText(getBaseContext(),"Erro ao parsear url",Toast.LENGTH_SHORT).show();
         }
         String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + loc + "&key=AIzaSyC7uds535yTKywUfGkBgrvV2LT4MA7_2Pk";
-        //String url = "https://maps.googleapis.com/maps/api/geocode/json?address=Rua%20Bahia,%2095,%20Ana%20Nery,%20Santa%20Cruz%20do%20Sul&key=AIzaSyC7uds535yTKywUfGkBgrvV2LT4MA7_2Pk";
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -140,18 +269,16 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
                             String locSel = response.getJSONArray("results")
                                     .getJSONObject(0)
                                     .getString("formatted_address");
-                            if (markerDest==null) {
-                                markerDest = mMap.addMarker(
-                                        new MarkerOptions().position(new LatLng(LatLongObj.getDouble("lat"), LatLongObj.getDouble("lng")))
-                                                .title(locSel)
-                                                //.draggable(true)
-                                                //.snippet("Segure e arraste para ajustar.")
-                                );
-                            }else{
-                                markerDest.setPosition(new LatLng(LatLongObj.getDouble("lat"), LatLongObj.getDouble("lng")));
-                                markerDest.setTitle(locSel);
-                            }
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LatLongObj.getDouble("lat"), LatLongObj.getDouble("lng")), 12));
+                            cordDest = new LatLng(LatLongObj.getDouble("lat"), LatLongObj.getDouble("lng"));
+                            markerDest = mMap.addMarker(
+                                    new MarkerOptions().position(cordDest)
+                                            .title(locSel)
+                                    //.draggable(true)
+                                    //.snippet("Segure e arraste para ajustar.")
+                            );
+                            origem = locSel;
+                            getDirections();
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LatLongObj.getDouble("lat"), LatLongObj.getDouble("lng")), 14));
                         }catch (JSONException E){
                             Toast.makeText(getBaseContext(),"Erro parsear retorno json obj",Toast.LENGTH_SHORT).show();
                         }
@@ -170,6 +297,10 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
         return true;
     }
 
+    private void traceExistingRoute(){
+
+    }
+
     /**
      * Grava ponto de partida para a rota ate a UNISC marcada pelo usuario
      * @param v
@@ -178,26 +309,61 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
         LatLng latlng = markerDest.getPosition();
         String locDest = markerDest.getTitle();
         //request para salvar rota
+
         Intent rcv = getIntent();
         Bundle extras = rcv.getExtras();
         String mat = "";
         if (extras!=null) {
             mat = extras.getString("matricula");
         }
-        new RotaWebDao(this).setRotaUsuario(mat,latlng.latitude,latlng.longitude,locDest);
+        String latlags = "";
+        for (LatLng ltl : markers) {
+            latlags+= ltl.latitude+","+ltl.longitude+"|";
+        }
+        String pol = "";
+        for (String p : polylinesAll) {
+            pol+= p+", ";
+        }
+        String pos = "";
+        for (LatLng ltl : positionsAll) {
+            pos+= ltl.latitude+","+ltl.longitude+"|";
+        }
+        new RotaWebDao(this).setRotaUsuario("77638",latlng.latitude,latlng.longitude,locDest,latlags,pol,pos);
         finish();
     }
 
 
-    public void getPositionWs(Double lat, Double lng, String locDest) {
+    public void getPositionWs(Double lat, Double lng, String locDest, String wps, String lines) {
         Log.d("WS-rota", "cheguei");
         markerDest = mMap.addMarker(
                 new MarkerOptions().position(new LatLng(lat, lng))
                         .title(locDest)
-                        //.draggable(true)
-                        //.snippet("Segure e arraste para ajustar.")
-                        );
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
+                //.draggable(true)
+                //.snippet("Segure e arraste para ajustar.")
+        );
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 13));
+
+        cordDest = new LatLng(lat, lng);
+        origem = locDest;
+
+        if (wps.length()>5) {
+            String arrltlngk[] = wps.split("\\|");
+            qtdMarkers = arrltlngk.length;
+            for (int k = 0; k < arrltlngk.length; k++) {
+                markers.add(new LatLng(Double.parseDouble(arrltlngk[k].split(",")[0]), Double.parseDouble(arrltlngk[k].split(",")[1])));
+                Log.d("HAHA", markers.get(k).toString());
+            }
+        }
+        String a[] = lines.split(", ");
+
+        String pline = "";
+        List<LatLng> decodedPath;
+        for (int k=0;k<a.length;k++){
+            pline = a[k];
+            polylinesAll.add(a[k]);
+            decodedPath = PolyUtil.decode(pline);
+            mMap.addPolyline(new PolylineOptions().addAll(decodedPath).width(4).color(Color.BLUE - 0x77000000));
+        }
 
         EditText et = (EditText) findViewById(R.id.inpDestSearch);
         et.setText(locDest);
