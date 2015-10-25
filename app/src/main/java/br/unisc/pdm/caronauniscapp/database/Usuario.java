@@ -30,6 +30,7 @@ public class Usuario {
     private String fone;
     private String sexo;
     private int usuario_tipo;
+    private String foto;
 
     public int getId() {
         return id;
@@ -79,6 +80,8 @@ public class Usuario {
     public void setSexo(String sexo) {
         this.sexo = sexo;
     }
+    public String getFoto() { return foto; }
+    public void setFoto(String f) { this.foto = f; }
 
     public int getCadastroTipo() {
         return usuario_tipo;

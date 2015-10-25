@@ -328,7 +328,7 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
         for (LatLng ltl : positionsAll) {
             pos+= ltl.latitude+","+ltl.longitude+"|";
         }
-        new RotaWebDao(this).setRotaUsuario("77638",latlng.latitude,latlng.longitude,locDest,latlags,pol,pos);
+        new RotaWebDao(this).setRotaUsuario(mat,latlng.latitude,latlng.longitude,locDest,latlags,pol,pos);
         finish();
     }
 
@@ -354,17 +354,19 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
                 Log.d("HAHA", markers.get(k).toString());
             }
         }
-        String a[] = lines.split(", ");
 
-        String pline = "";
-        List<LatLng> decodedPath;
-        for (int k=0;k<a.length;k++){
-            pline = a[k];
-            polylinesAll.add(a[k]);
-            decodedPath = PolyUtil.decode(pline);
-            mMap.addPolyline(new PolylineOptions().addAll(decodedPath).width(4).color(Color.BLUE - 0x77000000));
+        if (lines.length()>5) {
+            String a[] = lines.split(", ");
+
+            String pline = "";
+            List<LatLng> decodedPath;
+            for (int k = 0; k < a.length; k++) {
+                pline = a[k];
+                polylinesAll.add(a[k]);
+                decodedPath = PolyUtil.decode(pline);
+                mMap.addPolyline(new PolylineOptions().addAll(decodedPath).width(4).color(Color.BLUE - 0x77000000));
+            }
         }
-
         EditText et = (EditText) findViewById(R.id.inpDestSearch);
         et.setText(locDest);
     }

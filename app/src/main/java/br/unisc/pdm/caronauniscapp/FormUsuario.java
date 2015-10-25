@@ -1,18 +1,31 @@
 package br.unisc.pdm.caronauniscapp;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.opengl.Matrix;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
 
 import br.unisc.pdm.caronauniscapp.database.Usuario;
@@ -28,6 +41,11 @@ import br.unisc.pdm.caronauniscapp.webservice.UsuarioWebDao;
 public class FormUsuario extends ActionBarActivity implements UsuarioTela {
     private UsuarioDAO dao;
     private String matricula = "";
+
+    ImageView pickImage;
+    Bitmap selectedImage;
+
+    private final int SELECT_PHOTO = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +71,84 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
             webservice.getUsuarioByMat(matricula);
         }
 
+        pickImage = (ImageView) findViewById(R.id.imageView3);
+        pickImage.setImageResource(R.drawable.ic_person);
+        pickImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+            }
+        });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch(requestCode) {
+            case SELECT_PHOTO:
+                if(resultCode == RESULT_OK){
+                    try {
+                        final Uri imageUri = imageReturnedIntent.getData();
+                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                        selectedImage = BitmapFactory.decodeStream(imageStream);
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                        Cursor cursor = getContentResolver().query(imageUri, filePathColumn, null, null, null);
+                        cursor.moveToFirst();
+
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String filePath = cursor.getString(columnIndex);
+                        cursor.close();
+                        try {
+                            ExifInterface exif = new ExifInterface(filePath);
+                            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                            int rotate = 0;
+                            Log.d("tett", String.valueOf(orientation));
+                            switch (orientation) {
+                                case ExifInterface.ORIENTATION_ROTATE_270:
+                                    rotate = 270;
+                                    break;
+                                case ExifInterface.ORIENTATION_ROTATE_180:
+                                    rotate = 180;
+                                    break;
+                                case ExifInterface.ORIENTATION_ROTATE_90:
+                                    rotate = 90;
+                                    break;
+                            }
+                            pickImage.setImageBitmap(selectedImage);
+                            pickImage.setRotation(rotate);
+                            //selectedImage = Bitmap.createBitmap(selectedImage, 0,0,selectedImage.getWidth(), selectedImage.getHeight(), pickImage.getMatrix(),false);
+                            //selectedImage = ((BitmapDrawable)pickImage.getDrawable()).getBitmap();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+        }
+    }
+
+    public static String encodeTobase64(Bitmap image)
+    {
+        if(image==null) return "";
+        Bitmap immagex=image;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immagex.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+        Log.d("IMAGEE",imageEncoded);
+        return imageEncoded;
+    }
+    public static Bitmap decodeBase64(String input)
+    {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 
     public void populaTela(Usuario p){
@@ -79,6 +174,8 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
         if(p.getCadastroTipo()==3)
             rb_ambos.setChecked(true);
 
+        pickImage = (ImageView) findViewById(R.id.imageView3);
+        pickImage.setImageBitmap(decodeBase64(p.getFoto()));
     }
 
     /**
@@ -119,6 +216,10 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
         person.setSenha(edit_senha.getText().toString());
         person.setSexo(sexo);
         person.setCadastroTipo(ctipo);
+
+        selectedImage = ((BitmapDrawable)pickImage.getDrawable()).getBitmap();
+        selectedImage = Bitmap.createBitmap(selectedImage, 0, 0, selectedImage.getWidth(), selectedImage.getHeight(), pickImage.getMatrix(), false);
+        person.setFoto(encodeTobase64(selectedImage));
 
         UsuarioWebDao webservice = new UsuarioWebDao(this);
         if(!matricula.equals("")){

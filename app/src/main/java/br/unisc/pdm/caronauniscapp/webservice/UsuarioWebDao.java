@@ -91,6 +91,7 @@ public class UsuarioWebDao {
             p.setSenha(json.getString("senha"));
             p.setSexo(json.getString("sexo"));
             p.setCadastroTipo(json.getInt("usuario_tipo"));
+            p.setFoto(json.getString("foto"));
         }
         catch (JSONException e){
             e.printStackTrace();
@@ -138,6 +139,7 @@ public class UsuarioWebDao {
             jsonBody.put("senha",p.getSenha());
             jsonBody.put("sexo",p.getSexo());
             jsonBody.put("usuario_tipo",p.getCadastroTipo());
+            jsonBody.put("foto",p.getFoto());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -189,6 +191,7 @@ public class UsuarioWebDao {
             jsonBody.put("senha",p.getSenha());
             jsonBody.put("sexo",p.getSexo());
             jsonBody.put("usuario_tipo",p.getCadastroTipo());
+            jsonBody.put("foto",p.getFoto());
         } catch (JSONException e) {
             e.printStackTrace();
         }

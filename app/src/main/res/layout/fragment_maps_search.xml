@@ -18,10 +18,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/inpDestSearch"
-        android:layout_alignBottom="@+id/button"
         android:layout_toLeftOf="@+id/button"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/button" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
