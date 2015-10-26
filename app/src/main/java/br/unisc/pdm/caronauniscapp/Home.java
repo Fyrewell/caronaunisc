@@ -4,18 +4,20 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import br.unisc.pdm.caronauniscapp.chat.SearchActivity;
+
 /**
  * Activity inicial apos feito o login no aplicativo.
  * Acesso a todas as funcionalidades atraves de shortcuts para perfil, agenda ou rota.
  */
-public class Home extends ActionBarActivity {
+public class Home extends AppCompatActivity{
     String mat = "";
     String sexo = "";
     @Override
@@ -87,6 +89,11 @@ public class Home extends ActionBarActivity {
         Intent agAct = new Intent(this,Agenda.class);
         agAct.putExtra("matricula",mat);
         this.startActivityForResult(agAct, 1);
+    }
+    public void openChat(View v){
+        Intent chatAct = new Intent(this,SearchActivity.class);
+        chatAct.putExtra("matricula",mat);
+        startActivity(chatAct);
     }
     public void deslogar(View v){
         finish();

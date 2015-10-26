@@ -35,5 +35,8 @@
     <string name="label_tarde">Tarde</string>
     <string name="label_noite">Noite</string>
     <string name="label_qtde_passageiros">Quantidade lugares</string>
+    <string name="title_activity_chat_list_pessoas">chatListPessoas</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_sala">SalaActivity</string>
 
 </resources>
