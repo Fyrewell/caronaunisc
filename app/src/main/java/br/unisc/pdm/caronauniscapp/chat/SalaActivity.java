@@ -33,7 +33,7 @@ public class SalaActivity extends ListActivity {
     private Firebase mFirebaseRef,mFirebaseRef2;
     private ValueEventListener mConnectedListener;
     private ChatListAdapter mChatListAdapter;
-    String chat_usr_nome, chat_usr_mat, matricula;
+    String chat_usr_nome, chat_usr_mat, matricula, nome;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +46,7 @@ public class SalaActivity extends ListActivity {
             chat_usr_nome = extras.getString("chat_usr_nome");
             chat_usr_mat = extras.getString("chat_usr_mat");
             matricula = extras.getString("matricula");
+            nome = extras.getString("nome");
         }
 
         // Make sure we have a mUsername
@@ -138,7 +139,7 @@ public class SalaActivity extends ListActivity {
             // Create our 'model', a Chat object
             SimpleDateFormat sdf1= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Chat chat = new Chat(input, mUsername, sdf1.format(new Date()).toString());
-            Chat chat2 = new Chat(input, chat_usr_nome, sdf1.format(new Date()).toString());
+            Chat chat2 = new Chat(input, nome, sdf1.format(new Date()).toString());
             // Create a new, auto-generated child of that chat location, and save our chat data there
             mFirebaseRef.push().setValue(chat);
             mFirebaseRef2.push().setValue(chat2);

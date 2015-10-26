@@ -255,6 +255,7 @@ public class UsuarioWebDao {
                                 Intent home = new Intent(context, Home.class);
                                 home.putExtra("matricula",jsonBody.getString("matricula"));
                                 home.putExtra("sexo",response.getJSONObject("dados").getString("sexo"));
+                                home.putExtra("nome",response.getJSONObject("dados").getString("nome"));
                                 context.startActivity(home);
                             } else {
                                 Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();

@@ -36,6 +36,7 @@ public class SearchActivity extends Activity {
 
     ListView listView;
     private String mat = "";
+    private String nome = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class SearchActivity extends Activity {
 
         if (extras!=null) {
             mat = extras.getString("matricula");
+            nome = extras.getString("nome");
         }
     }
 
@@ -151,7 +153,7 @@ public class SearchActivity extends Activity {
             listMats.add(u.getMatricula());
         }
 
-        ListPessoas adapter = new ListPessoas(listImages, listNome, listMats, mat, this);
+        ListPessoas adapter = new ListPessoas(listImages, listNome, listMats, mat, nome, this);
         listView.setAdapter(adapter);
     }
 

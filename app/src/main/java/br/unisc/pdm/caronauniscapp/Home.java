@@ -20,6 +20,7 @@ import br.unisc.pdm.caronauniscapp.chat.SearchActivity;
 public class Home extends AppCompatActivity{
     String mat = "";
     String sexo = "";
+    String nome = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +35,7 @@ public class Home extends AppCompatActivity{
             Log.d("testReceb", extras.getString("sexo"));
             mat = extras.getString("matricula");
             sexo = extras.getString("sexo");
+            nome = extras.getString("nome");
             if (sexo.equals("Feminino")) {
                 ImageButton btn = (ImageButton)findViewById(R.id.btn_open_voce);
                 btn.setImageResource(R.drawable.icon_open_vocef);
@@ -93,6 +95,7 @@ public class Home extends AppCompatActivity{
     public void openChat(View v){
         Intent chatAct = new Intent(this,SearchActivity.class);
         chatAct.putExtra("matricula",mat);
+        chatAct.putExtra("nome",nome);
         startActivity(chatAct);
     }
     public void deslogar(View v){

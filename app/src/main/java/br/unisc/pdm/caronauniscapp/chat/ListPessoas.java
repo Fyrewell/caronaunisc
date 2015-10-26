@@ -27,15 +27,17 @@ public class ListPessoas extends BaseAdapter implements ListAdapter {
     private ArrayList<String> imgs = new ArrayList<String>();
     private ArrayList<Integer> mats = new ArrayList<Integer>();
     private String matricula;
+    private String nome;
     private Context context;
 
 
-    public ListPessoas(ArrayList<String> imgs, ArrayList<String> list, ArrayList<Integer> mats, String mat, Context context) {
+    public ListPessoas(ArrayList<String> imgs, ArrayList<String> list, ArrayList<Integer> mats, String mat, String nome, Context context) {
         this.list = list;
         this.imgs = imgs;
         this.mats = mats;
         this.context = context;
         this.matricula = mat;
+        this.nome = nome;
     }
 
     @Override
@@ -79,6 +81,7 @@ public class ListPessoas extends BaseAdapter implements ListAdapter {
                 intent.putExtra("chat_usr_nome", list.get(position));
                 intent.putExtra("chat_usr_mat", mats.get(position).toString());
                 intent.putExtra("matricula", matricula);
+                intent.putExtra("nome", nome);
                 context.startActivity(intent);
                 notifyDataSetChanged();
             }
