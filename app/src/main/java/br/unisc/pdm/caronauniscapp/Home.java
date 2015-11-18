@@ -21,6 +21,7 @@ public class Home extends AppCompatActivity{
     String mat = "";
     String sexo = "";
     String nome = "";
+    int usuario_tipo = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class Home extends AppCompatActivity{
             mat = extras.getString("matricula");
             sexo = extras.getString("sexo");
             nome = extras.getString("nome");
+            usuario_tipo = extras.getInt("usuario_tipo");
             if (sexo.equals("Feminino")) {
                 ImageButton btn = (ImageButton)findViewById(R.id.btn_open_voce);
                 btn.setImageResource(R.drawable.icon_open_vocef);
@@ -91,6 +93,12 @@ public class Home extends AppCompatActivity{
         Intent agAct = new Intent(this,Agenda.class);
         agAct.putExtra("matricula",mat);
         this.startActivityForResult(agAct, 1);
+    }
+    public void openCaronas(View v){
+        Intent carAct = new Intent(this,CaronasActivity.class);
+        carAct.putExtra("matricula",mat);
+        carAct.putExtra("usuario_tipo",usuario_tipo);
+        startActivity(carAct);
     }
     public void openChat(View v){
         Intent chatAct = new Intent(this,SearchActivity.class);

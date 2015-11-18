@@ -38,5 +38,11 @@
     <string name="title_activity_chat_list_pessoas">chatListPessoas</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_sala">SalaActivity</string>
+    <string name="title_activity_tan">tanActivity</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_activity_tab">TabActivity</string>
 
 </resources>

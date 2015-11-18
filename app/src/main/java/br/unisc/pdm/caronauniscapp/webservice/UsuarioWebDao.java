@@ -103,12 +103,16 @@ public class UsuarioWebDao {
         String url = Usuario.BASE_URL + "/usuario/"+mat;
         Log.d("WBS","URL: "+url);
 
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonArrayRequest jsArrRequest = new JsonArrayRequest
+                (url, new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response){
-                        Usuario p;
-                        p = jsobjToUsuario(response);
+                    public void onResponse(JSONArray response){
+                        Usuario p = new Usuario();
+                        try {
+                            p = jsobjToUsuario(response.getJSONObject(0));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         Log.d("WBS", p.toString());
                         List<Usuario> pessoas = new ArrayList<Usuario>();
                         pessoas.add(p);
@@ -123,7 +127,7 @@ public class UsuarioWebDao {
                     }
                 });
         RequestQueue queue = Volley.newRequestQueue(context);
-        queue.add(jsObjRequest);
+        queue.add(jsArrRequest);
 
     }
 
@@ -256,6 +260,7 @@ public class UsuarioWebDao {
                                 home.putExtra("matricula",jsonBody.getString("matricula"));
                                 home.putExtra("sexo",response.getJSONObject("dados").getString("sexo"));
                                 home.putExtra("nome",response.getJSONObject("dados").getString("nome"));
+                                home.putExtra("usuario_tipo",response.getJSONObject("dados").getInt("usuario_tipo"));
                                 context.startActivity(home);
                             } else {
                                 Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();

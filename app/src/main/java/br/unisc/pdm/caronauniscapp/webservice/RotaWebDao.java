@@ -108,5 +108,27 @@ public class RotaWebDao {
         queue.add(jsObjRequest);
     }
 
+    public void caronasReceber(String mat){
+        String url = baseurl+"/rotas/caronasReceber/"+mat;
+        Log.d("WBS", "URL: " + url);
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response){
+                        Log.d("WBSCaronasReceber", response.toString());
+                        tela.caronasReceber_callback(response);
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        //Toast.makeText(context, "Problema ao executar sua solicitacao", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(jsObjRequest);
+    }
 
 }

@@ -192,8 +192,8 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
                 wp += "|" + markers.get(i).latitude + "," + markers.get(i).longitude;
             }
         }
-        String url = "https://maps.googleapis.com/maps/api/directions/json?destination=UNISC%20Santa%20Cruz%20do%20Sul&origin="+origStr+wp+"&key=AIzaSyC7uds535yTKywUfGkBgrvV2LT4MA7_2Pk";
-
+        String url = "https://maps.googleapis.com/maps/api/directions/json?destination=-29.697666,-52.438677&origin="+origStr+wp+"&key=AIzaSyC7uds535yTKywUfGkBgrvV2LT4MA7_2Pk";
+        Log.d("URLDIRECTIONS",url);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -374,6 +374,9 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
 
     public void dispose(View v){
         finish();
+    }
+
+    public void caronasReceber_callback(JSONObject e) {
     }
 
 }
