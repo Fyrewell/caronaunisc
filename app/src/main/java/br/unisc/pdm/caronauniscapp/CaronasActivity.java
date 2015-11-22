@@ -1,22 +1,13 @@
 package br.unisc.pdm.caronauniscapp;
 
-import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.Toast;
 
@@ -35,7 +26,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.unisc.pdm.caronauniscapp.chat.ListPessoas;
 import br.unisc.pdm.caronauniscapp.database.Usuario;
 import br.unisc.pdm.caronauniscapp.webservice.RotaTela;
 import br.unisc.pdm.caronauniscapp.webservice.RotaWebDao;
@@ -43,9 +33,19 @@ import br.unisc.pdm.caronauniscapp.webservice.RotaWebDao;
 public class CaronasActivity extends TabActivity implements RotaTela {
 
     ListView listView;
+    ListView listView1;
     private String mat = "";
     private String nome = "";
     private int usuario_tipo = 0;
+
+    //repopular na mudanca tab
+    ArrayList<Integer> ListDist = new ArrayList<Integer>();
+    ArrayList<Integer> ListAgFornece = new ArrayList<Integer>();
+    ArrayList<Integer> ListAgRecebe = new ArrayList<Integer>();
+    ArrayList<Integer> ListStatus = new ArrayList<Integer>();
+    ArrayList<String> ListDias = new ArrayList<String>();
+    private int tipo = 1;
+    ProgressBar pgBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,9 @@ public class CaronasActivity extends TabActivity implements RotaTela {
         setContentView(R.layout.activity_caronas);
 
         this.listView = (ListView) findViewById(R.id.tab0);
+        this.listView1 = (ListView) findViewById(R.id.tab1);
+
+        pgBar = (ProgressBar) findViewById(R.id.progressBar);
 
         Intent rcv = getIntent();
         Bundle extras = rcv.getExtras();
@@ -81,19 +84,46 @@ public class CaronasActivity extends TabActivity implements RotaTela {
                 break;
         }
 
+        getTabHost().getTabWidget().getChildAt(0).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ListDist = new ArrayList<Integer>();
+                        ListAgFornece = new ArrayList<Integer>();
+                        ListAgRecebe = new ArrayList<Integer>();
+                        ListStatus = new ArrayList<Integer>();
+                        ListDias = new ArrayList<String>();
+                        tipo = 1;
+
+                        new RotaWebDao((CaronasActivity)v.getContext()).caronasReceber(mat);
+                        getTabHost().setCurrentTab(0);
+                        pgBar.setVisibility(View.VISIBLE);
+                    }
+                }
+        );
+        getTabHost().getTabWidget().getChildAt(1).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ListDist = new ArrayList<Integer>();
+                        ListAgFornece = new ArrayList<Integer>();
+                        ListAgRecebe = new ArrayList<Integer>();
+                        ListStatus = new ArrayList<Integer>();
+                        ListDias = new ArrayList<String>();
+                        tipo = 2;
+
+                        new RotaWebDao((CaronasActivity)v.getContext()).caronasDar(mat);
+                        getTabHost().setCurrentTab(1);
+                        pgBar.setVisibility(View.VISIBLE);
+                    }
+                }
+        );
+
         getTabHost().setCurrentTab(0);
 
         new RotaWebDao(this).caronasReceber(mat);
-    }
-
-    public void buscaPessoa() {
-
-        //pegando nome digitado para buscar
-        EditText edit_busca_pessoa = (EditText) findViewById(R.id.inp_nome_search);
-        String nome_buscar = edit_busca_pessoa.getText().toString();
-
-        buscaWs(nome_buscar);
-
+        listView.setAdapter(new ListCaronas());
+        listView1.setAdapter(new ListCaronas());
     }
 
     public void buscaWs(String nome) {
@@ -103,17 +133,14 @@ public class CaronasActivity extends TabActivity implements RotaTela {
             Toast.makeText(getBaseContext(), "Erro ao parsear url", Toast.LENGTH_SHORT).show();
         }
         String url = "http://caronaunisc.herokuapp.com/api/usuario/" + nome;
-        Log.d("WBS", "URL: " + url);
 
         JsonArrayRequest jsArrRequest = new JsonArrayRequest
                 (url, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("WBS", response.toString());
 
                         List<Usuario> pessoas = new ArrayList<Usuario>();
 
-                        //Fazendo PARSE do JSON
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject jsonKeyValue = response.getJSONObject(i);
@@ -123,7 +150,7 @@ public class CaronasActivity extends TabActivity implements RotaTela {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Log.d("WBS", pessoas.toString());
+
                         popularView(pessoas);
                     }
 
@@ -156,7 +183,6 @@ public class CaronasActivity extends TabActivity implements RotaTela {
     }
 
     public void popularView(List<Usuario> values) {
-        Log.d("return", values.toString());
 
         ArrayList<String> listNome = new ArrayList<String>();
         ArrayList<String> listImages = new ArrayList<String>();
@@ -167,32 +193,30 @@ public class CaronasActivity extends TabActivity implements RotaTela {
             listMats.add(u.getMatricula());
         }
 
-        ListCaronas adapter = new ListCaronas(listImages, listNome, listMats, mat, nome, this);
-        listView.setAdapter(adapter);
-    }
+        ArrayList<Integer> locListDist = ListDist;
+        ArrayList<Integer> locListAgFornece = ListAgFornece;
+        ArrayList<Integer> locListAgRecebe = ListAgRecebe;
+        ArrayList<Integer> locListStatus = ListStatus;
+        ArrayList<String> locListDias = ListDias;
 
-    public void buscaPessoa(View v) {
-        this.buscaPessoa();
+        ListCaronas adapter = new ListCaronas(listImages, listNome, listMats, locListDist, locListAgRecebe, locListAgFornece, locListStatus, locListDias, tipo, mat, nome, this);
+        if (tipo==1) {
+            listView.setAdapter(adapter);
+        }else{
+            listView1.setAdapter(adapter);
+        }
+
+        pgBar.setVisibility(View.GONE);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -201,24 +225,59 @@ public class CaronasActivity extends TabActivity implements RotaTela {
 
     }
     public void caronasReceber_callback(JSONObject e){
-        int matric = 0;
         JSONObject dias = null;
         JSONObject diax = null;
         String matricStr ="";
 
         for(int i=0;i<8;i++) {
             try{
-                diax = null;
                 dias = e.getJSONObject("match_req");
-                diax = dias.getJSONObject(String.valueOf(i));
-                matricStr += String.valueOf(diax.getInt("mat")) + ",";
+                for (int x=0;x<dias.getJSONArray(String.valueOf(i)).length();x++){
+                    diax = dias.getJSONArray(String.valueOf(i)).getJSONObject(x);
+                    matricStr += String.valueOf(diax.getInt("mat")) + ",";
+                    ListDist.add(diax.getInt("dist"));
+                    ListAgFornece.add(diax.getInt("ag_id_fornece"));
+                    ListAgRecebe.add(diax.getInt("ag_id_recebe"));
+                    ListStatus.add(diax.getInt("status"));
+                    ListDias.add(diax.getString("dia"));
+                }
             }catch (JSONException e1) {
                 e1.printStackTrace();
             }
         }
-        matricStr = matricStr.substring(0,matricStr.length()-1);
+        if (matricStr.length()>0) {
+            matricStr = matricStr.substring(0, matricStr.length() - 1);
 
-        buscaWs(matricStr);
+            buscaWs(matricStr);
+        }
+    }
+
+    public void caronasDar_callback(JSONObject e){
+        JSONObject dias = null;
+        JSONObject diax = null;
+        String matricStr ="";
+
+        for(int i=0;i<8;i++) {
+            try{
+                dias = e.getJSONObject("match_resp");
+                for (int x=0;x<dias.getJSONArray(String.valueOf(i)).length();x++){
+                    diax = dias.getJSONArray(String.valueOf(i)).getJSONObject(x);
+                    matricStr += String.valueOf(diax.getInt("mat")) + ",";
+                    ListDist.add(diax.getInt("dist"));
+                    ListAgFornece.add(diax.getInt("ag_id_fornece"));
+                    ListAgRecebe.add(diax.getInt("ag_id_recebe"));
+                    ListStatus.add(diax.getInt("status"));
+                    ListDias.add(diax.getString("dia"));
+                }
+            }catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+        }
+        if (matricStr.length()>0) {
+            matricStr = matricStr.substring(0, matricStr.length() - 1);
+
+            buscaWs(matricStr);
+        }
     }
 
 }

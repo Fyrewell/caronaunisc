@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,10 +28,12 @@ import br.unisc.pdm.caronauniscapp.webservice.AgendaWebDao;
  * marcacoes ja feitas anteriormente.
  */
 public class configuraDia extends ActionBarActivity implements AgendaTela {
+
     private AgendaWebDao dao = new AgendaWebDao(this);
     private String mat = "";
     private String dia_click = "";
     private int usuariotipo = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +47,6 @@ public class configuraDia extends ActionBarActivity implements AgendaTela {
             mat = extras.getString("matricula");
             dia_click = extras.getString("VALUE_DIA_SEMANA");
             usuariotipo = extras.getInt("usuariotipo");
-            Log.d("usuariotipo",Integer.toString(usuariotipo));
             labelarDia();
         }
 
@@ -107,8 +107,6 @@ public class configuraDia extends ActionBarActivity implements AgendaTela {
 
     }
 
-
-
     public void labelarDia(){
         TextView et = (TextView) findViewById(R.id.cfgdia_data_titulo);
         String lbl = "";
@@ -125,25 +123,16 @@ public class configuraDia extends ActionBarActivity implements AgendaTela {
         dao.getAgendaByMat(mat,dia_click);
     }
 
-    public void wsSearchDia(){
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_configura_dia, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if(id == R.id.action_accept_dia){
             gravarDiaAgenda();
             return true;
@@ -185,22 +174,18 @@ public class configuraDia extends ActionBarActivity implements AgendaTela {
         if(rb_qtd3.isChecked()) qtd = 3;
         if(rb_qtd4.isChecked()) qtd = 4;
 
-
         if (ctipo==0||(ctipo==1&&(turno.equals("")||ctipo==0||qtd==0))||(ctipo==2&&(turno.equals("")||ctipo==0))){
             Toast.makeText(this, "Entrar com todos os dados!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         dao.setAgendaDia(mat, dia_click, ctipo, turno, qtd);
-
     }
 
     public void agendaAllItens(int tipo, JSONArray agItens){
     }
 
     public void agendaItem(String dataF, int tipo, String turno, int qtd){
-        Log.d("CHEGOUWS", dataF);
-
         TextView et = (TextView) findViewById(R.id.cfgdia_data_titulo);
         et.setText(et.getText()+" - "+dataF);
         RadioButton rb_dar = (RadioButton) findViewById(R.id.radio_dar);

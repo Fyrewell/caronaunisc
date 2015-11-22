@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,11 +19,13 @@ import br.unisc.pdm.caronauniscapp.webservice.AgendaTela;
 import br.unisc.pdm.caronauniscapp.webservice.AgendaWebDao;
 
 public class Agenda extends ActionBarActivity implements AgendaTela {
+
     private AgendaWebDao dao = new AgendaWebDao(this);
     private String mat = "";
     int diaClicado = 0;
     int usuariotipo = 0;
     private GridView gridview;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +41,6 @@ public class Agenda extends ActionBarActivity implements AgendaTela {
         if (extras != null) {
             mat = extras.getString("matricula");
         }
-
-        Log.d("MAT", "trouxe a matricula " + mat);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -69,19 +68,14 @@ public class Agenda extends ActionBarActivity implements AgendaTela {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_agenda, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == android.R.id.home){
             Intent intent = new Intent();
             intent.putExtra("matricula",mat);
@@ -95,12 +89,10 @@ public class Agenda extends ActionBarActivity implements AgendaTela {
 
     public void agendaAllItens(int tipo, JSONArray agItens){
         int i;
-        Log.d("YEAGH",agItens.toString());
         JSONObject ob;
         ImageAdapter imgAdp = (ImageAdapter) gridview.getAdapter();
         for (i = 1; i < 8; i++) {
             try {
-                Log.d("YEAGH", agItens.get(i - 1).toString());
                 ob = agItens.getJSONObject(i - 1);
                 imgAdp = getAgendaView(imgAdp, Integer.parseInt(ob.get("ag_diasemana").toString()), Integer.parseInt(ob.get("ag_tipo").toString()), ob.get("ag_turno").toString(), Integer.parseInt(ob.get("ag_qtd").toString()));
             }catch(JSONException e){
@@ -215,7 +207,6 @@ public class Agenda extends ActionBarActivity implements AgendaTela {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                Log.d("CHEGEEEEEEEEEEEEEEEEEEEEi","EJEEJ");
                 mat = data.getStringExtra("matricula");
                 diaClicado = Integer.parseInt(data.getStringExtra("diaatualiza"));
                 dao.getAgendaByMat(mat,String.valueOf(diaClicado));

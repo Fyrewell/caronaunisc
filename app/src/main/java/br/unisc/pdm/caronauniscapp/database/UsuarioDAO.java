@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -62,7 +61,6 @@ public class UsuarioDAO {    Context context;
 
     public void deleteUsuario(Usuario Usuario) {
         long id = Usuario.getId();
-        Log.d("DESIGNCRUD", "Usuario deleted with id: " + id);
         database.delete(UsuarioContract.Usuario.TABLE_NAME, UsuarioContract.Usuario._ID + " = " + id, null);
         Toast.makeText(this.context, "Usuario deletada com sucesso: " + id, Toast.LENGTH_SHORT).show();
     }

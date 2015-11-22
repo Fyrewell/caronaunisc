@@ -1,7 +1,6 @@
 package br.unisc.pdm.caronauniscapp.webservice;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -20,6 +19,7 @@ import org.json.JSONObject;
  * Created by Diego on 17/10/2015.
  */
 public class AgendaWebDao {
+
     public Context context;
     public AgendaTela tela;
     public String baseurl = "http://caronaunisc.herokuapp.com/api";
@@ -31,13 +31,11 @@ public class AgendaWebDao {
 
     public void getAgendaByMat(String mat, String dia){
         String url = baseurl+"/agenda/diasemana/"+mat+"/"+dia;
-        Log.d("WBS", "URL: " + url);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Log.d("WBS", response.toString());
                         String dataT;
                         int tipo=0; String turno=""; int qtd=0;
                         try {
@@ -65,13 +63,11 @@ public class AgendaWebDao {
 
     public void getAgendaAllItensByMat(String mat){
         String url = baseurl+"/agenda/diasemana/"+mat;
-        Log.d("WBS", "URL: " + url);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Log.d("WBS", response.toString());
                         int cad_tipo=0;
                         try {
                             cad_tipo = response.getInt("usuario_tipo");
@@ -103,16 +99,11 @@ public class AgendaWebDao {
             e.printStackTrace();
         }
 
-        Log.d("WBS",jsonBody.toString());
-
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Log.d("WBS", "Retornou do request!");
-                        Log.d("WBS", response.toString());
                         try {
-                            Log.d("WBS", response.getString("result"));
                             Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();
                             tela.setAgendaDia_callback();
                         }catch(JSONException e){
@@ -124,8 +115,6 @@ public class AgendaWebDao {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        Log.d("WBS","caiu no onErrorResponse");
-                        Log.d("WBS", error.toString());
                     }
                 });
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -141,16 +130,11 @@ public class AgendaWebDao {
             e.printStackTrace();
         }
 
-        Log.d("WBS",jsonBody.toString());
-
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Log.d("WBS", "Retornou do request!");
-                        Log.d("WBS", response.toString());
                         try {
-                            Log.d("WBS", response.getString("result"));
                             Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();
                             tela.setAgendaDia_callback();
                         }catch(JSONException e){
@@ -161,8 +145,6 @@ public class AgendaWebDao {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        Log.d("WBS","caiu no onErrorResponse");
-                        Log.d("WBS", error.toString());
                     }
                 });
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -178,16 +160,11 @@ public class AgendaWebDao {
             e.printStackTrace();
         }
 
-        Log.d("WBS",jsonBody.toString());
-
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.DELETE, url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Log.d("WBS", "Retornou do request!");
-                        Log.d("WBS", response.toString());
                         try {
-                            Log.d("WBS", response.getString("result"));
                             Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();
                             tela.setAgendaDia_callback();
                         }catch(JSONException e){
@@ -199,8 +176,6 @@ public class AgendaWebDao {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        Log.d("WBS","caiu no onErrorResponse");
-                        Log.d("WBS", error.toString());
                     }
                 });
         RequestQueue queue = Volley.newRequestQueue(context);

@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="br.unisc.pdm.caronauniscapp.FormPessoa">
 
-
     <item android:id="@+id/action_accept_pessoa"
         android:title="@string/action_accept_pessoa"
         android:icon="@drawable/ic_action_accept"

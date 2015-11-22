@@ -2,7 +2,6 @@ package br.unisc.pdm.caronauniscapp.webservice;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -50,7 +49,6 @@ public class UsuarioWebDao {
 
                 List<Usuario> pessoas = new ArrayList<Usuario>();
 
-                //Fazendo PARSE do JSON
                 String valores = "";
                 try {
                     for(int i =0; i < response.length(); i++) {
@@ -61,7 +59,6 @@ public class UsuarioWebDao {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d("WBS", pessoas.toString());
                 tela.popularView(pessoas);
             }
 
@@ -70,7 +67,6 @@ public class UsuarioWebDao {
             public void onErrorResponse(VolleyError error) {
                 // TODO Auto-generated method stub
                 Toast.makeText(context, "Problema ao buscar dados da web", Toast.LENGTH_SHORT).show();
-                Log.d("WBS", error.toString());
             }
         }
         );
@@ -101,7 +97,6 @@ public class UsuarioWebDao {
 
     public void getUsuarioByMat(String mat) {
         String url = Usuario.BASE_URL + "/usuario/"+mat;
-        Log.d("WBS","URL: "+url);
 
         JsonArrayRequest jsArrRequest = new JsonArrayRequest
                 (url, new Response.Listener<JSONArray>() {
@@ -113,7 +108,6 @@ public class UsuarioWebDao {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Log.d("WBS", p.toString());
                         List<Usuario> pessoas = new ArrayList<Usuario>();
                         pessoas.add(p);
                         tela.popularView(pessoas);
@@ -133,9 +127,7 @@ public class UsuarioWebDao {
 
     public void editUsuario(Usuario p){
         String url = Usuario.BASE_URL + "/usuario/"+p.getMatricula();
-        Log.d("WBS","URL: "+url);
 
-        //========= CRIAR JSON COM DADOS DO ESTUDANTE ===============
         final JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("matricula",p.getMatricula());
@@ -148,16 +140,11 @@ public class UsuarioWebDao {
             e.printStackTrace();
         }
 
-        Log.d("WBS",jsonBody.toString());
-        //========== FAZER REQUEST PASSANDO O JSON E tratando o retorno ===========
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.PUT, url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Log.d("WBS", "Retornou do request!");
-                        Log.d("WBS", response.toString());
                         try {
-                            Log.d("WBS", response.getString("result"));
                             if (response.getString("result").equals("Alterado com sucesso!")) {
                                 Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();
                             } else {
@@ -171,8 +158,6 @@ public class UsuarioWebDao {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        Log.d("WBS","caiu no onErrorResponse");
-                        Log.d("WBS", error.toString());
                     }
                 });
 
@@ -185,9 +170,7 @@ public class UsuarioWebDao {
 
     public void insertUsuario(Usuario p){
         String url = Usuario.BASE_URL + "/usuario";
-        Log.d("WBS","URL: "+url);
 
-        //========= CRIAR JSON COM DADOS DO ESTUDANTE ===============
         final JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("matricula",p.getMatricula());
@@ -199,16 +182,11 @@ public class UsuarioWebDao {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("WBS",jsonBody.toString());
-        //========== FAZER REQUEST PASSANDO O JSON E tratando o retorno ===========
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Log.d("WBS", "Retornou do request!");
-                        Log.d("WBS", response.toString());
                         try {
-                            Log.d("WBS", response.getString("result"));
                             if (response.getString("result").equals("Inserido com sucesso!")) {
                                 Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();
                                 context.startActivity(new Intent(context, Logar.class));
@@ -224,8 +202,6 @@ public class UsuarioWebDao {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        Log.d("WBS","caiu no onErrorResponse");
-                        Log.d("WBS", error.toString());
                     }
                 });
 
@@ -238,7 +214,7 @@ public class UsuarioWebDao {
 
     public void loginUsuario(String matricula, String senha){
         String url = Usuario.BASE_URL + "/login";
-        //========= CRIAR JSON COM DADOS DO ESTUDANTE ===============
+
         final JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("matricula",matricula);
@@ -246,15 +222,11 @@ public class UsuarioWebDao {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("WBS",jsonBody.toString());
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Log.d("WBS", "Retornou do request!");
-                        Log.d("WBS", response.toString());
                         try {
-                            Log.d("WBS", response.getString("result"));
                             if (response.getString("result").equals("Logado com sucesso!")) {
                                 Intent home = new Intent(context, Home.class);
                                 home.putExtra("matricula",jsonBody.getString("matricula"));
@@ -274,8 +246,6 @@ public class UsuarioWebDao {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        Log.d("WBS","caiu no onErrorResponse");
-                        Log.d("WBS", error.toString());
                     }
                 });
 

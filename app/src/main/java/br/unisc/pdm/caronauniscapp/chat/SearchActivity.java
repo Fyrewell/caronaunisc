@@ -1,14 +1,16 @@
 package br.unisc.pdm.caronauniscapp.chat;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -32,16 +34,20 @@ import java.util.List;
 import br.unisc.pdm.caronauniscapp.R;
 import br.unisc.pdm.caronauniscapp.database.Usuario;
 
-public class SearchActivity extends Activity {
+public class SearchActivity extends AppCompatActivity {
 
     ListView listView;
     private String mat = "";
     private String nome = "";
 
+    ProgressBar pgBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_persons);
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1f1e79")));
 
         this.listView = (ListView) findViewById(R.id.search_pessoas_list);
 
@@ -52,6 +58,8 @@ public class SearchActivity extends Activity {
             mat = extras.getString("matricula");
             nome = extras.getString("nome");
         }
+        pgBar = (ProgressBar) findViewById(R.id.progressBar);
+        pgBar.setVisibility(View.GONE);
     }
 
     public void buscaPessoa() {
@@ -61,6 +69,7 @@ public class SearchActivity extends Activity {
         String nome_buscar = edit_busca_pessoa.getText().toString();
 
         buscaWs(nome_buscar);
+        pgBar.setVisibility(View.VISIBLE);
 
     }
 
@@ -71,13 +80,11 @@ public class SearchActivity extends Activity {
             Toast.makeText(getBaseContext(), "Erro ao parsear url", Toast.LENGTH_SHORT).show();
         }
         String url = "http://caronaunisc.herokuapp.com/api/usuario/search/" + nome;
-        Log.d("WBS", "URL: " + url);
 
         JsonArrayRequest jsArrRequest = new JsonArrayRequest
                 (url, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("WBS", response.toString());
 
                         List<Usuario> pessoas = new ArrayList<Usuario>();
 
@@ -92,7 +99,6 @@ public class SearchActivity extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Log.d("WBS", pessoas.toString());
                         popularView(pessoas);
                     }
 
@@ -125,25 +131,7 @@ public class SearchActivity extends Activity {
     }
 
     public void popularView(List<Usuario> values) {
-        Log.d("return", values.toString());
 
-/*
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-
-                Usuario p = (Usuario) lista.getItemAtPosition(position);
-
-                Intent intent = new Intent(getBaseContext(),VerUsuario.class);
-                intent.putExtra("ID",p.getId());
-                Toast.makeText(getBaseContext(), "Selecionado " + p.getNome(), Toast.LENGTH_SHORT).show();
-
-                startActivity(intent);
-
-            }
-        });
-*/
         ArrayList<String> listNome = new ArrayList<String>();
         ArrayList<String> listImages = new ArrayList<String>();
         ArrayList<Integer> listMats = new ArrayList<Integer>();
@@ -155,6 +143,7 @@ public class SearchActivity extends Activity {
 
         ListPessoas adapter = new ListPessoas(listImages, listNome, listMats, mat, nome, this);
         listView.setAdapter(adapter);
+        pgBar.setVisibility(View.GONE);
     }
 
     public void buscaPessoa(View v) {
@@ -176,7 +165,8 @@ public class SearchActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            finish();
             return true;
         }
 

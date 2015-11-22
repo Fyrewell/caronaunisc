@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,10 +17,12 @@ import br.unisc.pdm.caronauniscapp.chat.SearchActivity;
  * Acesso a todas as funcionalidades atraves de shortcuts para perfil, agenda ou rota.
  */
 public class Home extends AppCompatActivity{
+
     String mat = "";
     String sexo = "";
     String nome = "";
     int usuario_tipo = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +33,6 @@ public class Home extends AppCompatActivity{
         Intent rcv = getIntent();
         Bundle extras = rcv.getExtras();
         if (extras!=null) {
-            Log.d("testReceb", extras.getString("matricula"));
-            Log.d("testReceb", extras.getString("sexo"));
             mat = extras.getString("matricula");
             sexo = extras.getString("sexo");
             nome = extras.getString("nome");
@@ -47,33 +46,28 @@ public class Home extends AppCompatActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_list) {
-//            startActivity(new Intent(this,ListViewLoader.class));
-//        }
 
         if (id == R.id.action_cadastro) {
             openVoce(findViewById(R.id.action_cadastro));
         }
-
         if (id == R.id.action_map) {
             openRota(findViewById(R.id.action_map));
         }
-
         if (id == R.id.action_agenda) {
             openAgenda(findViewById(R.id.action_agenda));
+        }
+        if (id == R.id.action_caronas) {
+            openCaronas(findViewById(R.id.action_caronas));
+        }
+        if (id == R.id.action_chat) {
+            openChat(findViewById(R.id.action_chat));
         }
 
         return super.onOptionsItemSelected(item);

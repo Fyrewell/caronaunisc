@@ -3,12 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".Home"
     android:name="menuHome">
 
-    <!--<item android:id="@+id/action_list"-->
-        <!--android:title="@string/action_list"-->
-        <!--android:orderInCategory="10"-->
-        <!--android:icon="@drawable/ic_action_view_as_list"-->
-        <!--app:showAsAction="ifRoom" />-->
-
     <item android:id="@+id/action_cadastro"
         android:title="@string/action_cadastro"
         android:orderInCategory="100"
@@ -19,6 +13,14 @@
         app:showAsAction="never" />
     <item android:id="@+id/action_agenda"
         android:title="@string/action_agenda"
+        android:orderInCategory="200"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_caronas"
+        android:title="@string/action_caronas"
+        android:orderInCategory="200"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_chat"
+        android:title="@string/action_chat"
         android:orderInCategory="200"
         app:showAsAction="never" />
 </menu>

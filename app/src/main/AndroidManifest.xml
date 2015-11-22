@@ -57,7 +57,6 @@
             android:name=".Agenda"
             android:label="@string/title_activity_agenda"
             android:parentActivityName=".Home" >
-
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -67,8 +66,6 @@
             android:name=".configuraDia"
             android:label="@string/title_activity_configura_dia"
             android:parentActivityName=".Agenda" >
-
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.unisc.pdm.caronauniscapp.Agenda" />
@@ -79,7 +76,10 @@
         </activity>
         <activity
             android:name=".chat.SearchActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_chat_search" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.unisc.pdm.caronauniscapp.Home" />
         </activity>
         <activity
             android:name=".chat.SalaActivity"
@@ -87,10 +87,7 @@
         </activity>
         <activity
             android:name=".CaronasActivity"
-            android:label="@string/title_activity_main"
             android:parentActivityName=".Home" >
-
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.unisc.pdm.caronauniscapp.Home" />

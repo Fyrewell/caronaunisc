@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +37,7 @@ import br.unisc.pdm.caronauniscapp.webservice.UsuarioWebDao;
  * Created by Diego on 05/10/2015.
  */
 public class FormUsuario extends ActionBarActivity implements UsuarioTela {
+
     private UsuarioDAO dao;
     private String matricula = "";
 
@@ -59,11 +59,8 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
             matricula = extras.getString("matricula");
         }
 
-        Log.d("MAT", "buscou o matricula " + matricula);
-
         dao = new UsuarioDAO(this);
         dao.open();
-
 
         if (!matricula.equals("")) {
             UsuarioWebDao webservice = new UsuarioWebDao(this);
@@ -80,7 +77,6 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
             }
         });
-
     }
 
     @Override
@@ -106,7 +102,6 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
                             ExifInterface exif = new ExifInterface(filePath);
                             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
                             int rotate = 0;
-                            Log.d("tett", String.valueOf(orientation));
                             switch (orientation) {
                                 case ExifInterface.ORIENTATION_ROTATE_270:
                                     rotate = 270;
@@ -120,8 +115,6 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
                             }
                             pickImage.setImageBitmap(selectedImage);
                             pickImage.setRotation(rotate);
-                            //selectedImage = Bitmap.createBitmap(selectedImage, 0,0,selectedImage.getWidth(), selectedImage.getHeight(), pickImage.getMatrix(),false);
-                            //selectedImage = ((BitmapDrawable)pickImage.getDrawable()).getBitmap();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -133,24 +126,21 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
         }
     }
 
-    public static String encodeTobase64(Bitmap image)
-    {
+    public static String encodeTobase64(Bitmap image) {
         if(image==null) return "";
         Bitmap immagex=image;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         immagex.compress(Bitmap.CompressFormat.JPEG, 20, baos);
         byte[] b = baos.toByteArray();
         String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
-        Log.d("IMAGEE",imageEncoded);
         return imageEncoded;
     }
-    public static Bitmap decodeBase64(String input)
-    {
+    public static Bitmap decodeBase64(String input) {
         byte[] decodedByte = Base64.decode(input, 0);
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 
-    public void populaTela(Usuario p){
+    public void populaTela(Usuario p) {
         EditText edit_matricula = (EditText) findViewById(R.id.edit_matricula);
         EditText edit_nome = (EditText) findViewById(R.id.edit_nome);
         EditText edit_senha = (EditText) findViewById(R.id.edit_senha);
@@ -181,7 +171,7 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
      * Captura os dados informados pelo usuario e edita seu perfil caso usuario ja exista,
      * ou realiza seu cadastro caso seja novo usuario.
      */
-    public void insertOrEditPerson(){
+    public void insertOrEditPerson() {
         //Buscando dados de entrada digitados pelo usuario
         EditText edit_id = (EditText) findViewById(R.id.edit_id);
         EditText edit_matricula = (EditText) findViewById(R.id.edit_matricula);
@@ -228,24 +218,18 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
         }
 
         finish();
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_form_pessoa, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if(id == R.id.action_accept_pessoa){
             insertOrEditPerson();
             return true;
@@ -257,7 +241,6 @@ public class FormUsuario extends ActionBarActivity implements UsuarioTela {
     @Override
     public void popularView(List<Usuario> values) {
         populaTela(values.get(0));
-        Log.d("WBS", values.toString());
     }
 
     public void cadastrar(View v)

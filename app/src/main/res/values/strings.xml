@@ -27,6 +27,8 @@
     <string name="action_cadastro">Você</string>
     <string name="action_map">Rota</string>
     <string name="action_agenda">Agenda</string>
+    <string name="action_caronas">Caronas</string>
+    <string name="action_chat">Chat</string>
     <string name="title_activity_agenda">Agenda</string>
     <string name="title_activity_configura_dia">Configurar Dia</string>
     <string name="label_tipo_ag">Tipo</string>
@@ -36,9 +38,8 @@
     <string name="label_noite">Noite</string>
     <string name="label_qtde_passageiros">Quantidade lugares</string>
     <string name="title_activity_chat_list_pessoas">chatListPessoas</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_chat_search">Chat</string>
     <string name="title_activity_sala">SalaActivity</string>
-    <string name="title_activity_tan">tanActivity</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>

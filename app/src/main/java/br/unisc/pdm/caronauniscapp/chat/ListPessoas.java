@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ import br.unisc.pdm.caronauniscapp.R;
  * Created by Diego on 27/09/2015.
  */
 public class ListPessoas extends BaseAdapter implements ListAdapter {
+
     private ArrayList<String> list = new ArrayList<String>();
     private ArrayList<String> imgs = new ArrayList<String>();
     private ArrayList<Integer> mats = new ArrayList<Integer>();
@@ -30,6 +30,7 @@ public class ListPessoas extends BaseAdapter implements ListAdapter {
     private String nome;
     private Context context;
 
+    public ListPessoas() { }
 
     public ListPessoas(ArrayList<String> imgs, ArrayList<String> list, ArrayList<Integer> mats, String mat, String nome, Context context) {
         this.list = list;
@@ -67,10 +68,8 @@ public class ListPessoas extends BaseAdapter implements ListAdapter {
         //Handle TextView and display string from your list
         TextView listItemText = (TextView)view.findViewById(R.id.list_item_string);
         listItemText.setText(list.get(position));
-        Log.d("list", list.toString());
         ImageView ImgPessoa = (ImageView)view.findViewById(R.id.imageView_pessoa);
         ImgPessoa.setImageBitmap(decodeBase64(imgs.get(position)));
-
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override

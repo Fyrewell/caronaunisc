@@ -26,7 +26,6 @@ import br.unisc.pdm.caronauniscapp.R;
 
 public class SalaActivity extends ListActivity {
 
-    // TODO: change this to your own Firebase URL
     private static final String FIREBASE_URL = "https://caronaunisc-chat.firebaseio.com";
 
     private String mUsername = "Voce";

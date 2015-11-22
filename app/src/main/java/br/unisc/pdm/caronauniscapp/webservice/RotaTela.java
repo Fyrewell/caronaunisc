@@ -6,6 +6,7 @@ import org.json.JSONObject;
  * Created by Diego on 12/10/2015.
  */
 public interface RotaTela {
-    public void getPositionWs(Double Lat, Double Lng, String locDest, String wps, String lines);
-    public void caronasReceber_callback(JSONObject users);
+    void getPositionWs(Double Lat, Double Lng, String locDest, String wps, String lines);
+    void caronasReceber_callback(JSONObject users);
+    void caronasDar_callback(JSONObject users);
 }

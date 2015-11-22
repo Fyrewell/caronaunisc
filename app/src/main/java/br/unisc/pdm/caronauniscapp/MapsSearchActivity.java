@@ -21,7 +21,9 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -67,6 +69,20 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
         String mat = "";
         if (extras!=null) {
             mat = extras.getString("matricula");
+
+            String target_usr_mat = extras.getString("target_usr_mat");
+            if (target_usr_mat!=null){
+                EditText et1 = (EditText) findViewById(R.id.inpDestSearch);
+                TextView tv1 = (TextView) findViewById(R.id.textView2);
+                Button b1 = (Button) findViewById(R.id.button);
+                Button b2 = (Button) findViewById(R.id.button2);
+                Button b3 = (Button) findViewById(R.id.button3);
+                Button b4 = (Button) findViewById(R.id.button4);
+                et1.setVisibility(View.GONE); tv1.setVisibility(View.GONE);
+                b1.setVisibility(View.GONE); b2.setVisibility(View.GONE);
+                b3.setVisibility(View.GONE); b4.setText("Voltar");
+                new RotaWebDao(this).getRotaByMat(target_usr_mat);
+            }
         }
         new RotaWebDao(this).getRotaByMat(mat);
     }
@@ -377,6 +393,8 @@ public class MapsSearchActivity extends FragmentActivity implements RotaTela{
     }
 
     public void caronasReceber_callback(JSONObject e) {
+    }
+    public void caronasDar_callback(JSONObject e) {
     }
 
 }

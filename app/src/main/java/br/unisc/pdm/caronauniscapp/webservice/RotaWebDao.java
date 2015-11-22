@@ -1,7 +1,6 @@
 package br.unisc.pdm.caronauniscapp.webservice;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -31,13 +30,11 @@ public class RotaWebDao {
 
     public void getRotaByMat(String mat){
         String url = baseurl+"/rota/"+mat;
-        Log.d("WBS", "URL: " + url);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Log.d("WBS", response.toString());
                         double lat, lng;
                         String locDest,wps,lines;
                         try {
@@ -80,16 +77,11 @@ public class RotaWebDao {
             e.printStackTrace();
         }
 
-        Log.d("WBS",jsonBody.toString());
-
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Log.d("WBS", "Retornou do request!");
-                        Log.d("WBS", response.toString());
                         try {
-                            Log.d("WBS", response.getString("result"));
                             Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();
                         }catch(JSONException e){
 
@@ -100,8 +92,6 @@ public class RotaWebDao {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        Log.d("WBS","caiu no onErrorResponse");
-                        Log.d("WBS", error.toString());
                     }
                 });
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -110,13 +100,11 @@ public class RotaWebDao {
 
     public void caronasReceber(String mat){
         String url = baseurl+"/rotas/caronasReceber/"+mat;
-        Log.d("WBS", "URL: " + url);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response){
-                        Log.d("WBSCaronasReceber", response.toString());
                         tela.caronasReceber_callback(response);
                     }
 
@@ -131,4 +119,121 @@ public class RotaWebDao {
         queue.add(jsObjRequest);
     }
 
+
+    public void caronasDar(String mat){
+        String url = baseurl+"/rotas/caronasDar/"+mat;
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response){
+                        tela.caronasDar_callback(response);
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        //Toast.makeText(context, "Problema ao executar sua solicitacao", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(jsObjRequest);
+    }
+
+    public void caronasEscolher(int ag_id_fornece,int ag_id_recebe,int dist){
+        String url = baseurl+"/rota/caronasEscolher";
+        final JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("mch_ag_id_fornece",ag_id_fornece);
+            jsonBody.put("mch_ag_id_recebe",ag_id_recebe);
+            jsonBody.put("mch_dist",dist);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response){
+                        try {
+                            Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();
+                        }catch(JSONException e){
+
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                    }
+                });
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(jsObjRequest);
+    }
+
+    public void caronasAceitar(int ag_id_fornece,int ag_id_recebe,int dist){
+        String url = baseurl+"/rota/caronasAceitar";
+        final JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("mch_ag_id_fornece",ag_id_fornece);
+            jsonBody.put("mch_ag_id_recebe",ag_id_recebe);
+            jsonBody.put("mch_dist",dist);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response){
+                        try {
+                            Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();
+                        }catch(JSONException e){
+
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                    }
+                });
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(jsObjRequest);
+    }
+
+    public void caronasRecusar(int ag_id_fornece,int ag_id_recebe,int dist){
+        String url = baseurl+"/rota/caronasRecusar";
+        final JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("mch_ag_id_fornece",ag_id_fornece);
+            jsonBody.put("mch_ag_id_recebe",ag_id_recebe);
+            jsonBody.put("mch_dist",dist);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response){
+                        try {
+                            Toast.makeText(context, response.getString("result"), Toast.LENGTH_SHORT).show();
+                        }catch(JSONException e){
+
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                    }
+                });
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(jsObjRequest);
+    }
 }
