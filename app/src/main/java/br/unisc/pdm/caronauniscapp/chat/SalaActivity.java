@@ -26,6 +26,7 @@ import br.unisc.pdm.caronauniscapp.R;
 
 public class SalaActivity extends ListActivity {
 
+    // TODO: change this to your own Firebase URL
     private static final String FIREBASE_URL = "https://caronaunisc-chat.firebaseio.com";
 
     private String mUsername = "Voce";
@@ -102,7 +103,7 @@ public class SalaActivity extends ListActivity {
                 if (connected) {
                     Toast.makeText(SalaActivity.this, "Conectado ao chat", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(SalaActivity.this, "Desconectado ao chat", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SalaActivity.this, "Desconectado ao chat", Toast.LENGTH_SHORT).show();
                 }
             }
 

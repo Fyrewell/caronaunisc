@@ -2,7 +2,11 @@ package br.unisc.pdm.caronauniscapp.chat;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.client.Query;
@@ -38,14 +42,78 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
     protected void populateView(View view, Chat chat) {
         // Map a Chat object to an entry in our listview
         String author = chat.getAuthor();
-        TextView authorText = (TextView) view.findViewById(R.id.author);
-        authorText.setText(author + ": ");
+        //TextView authorText = (TextView) view.findViewById(R.id.author);
+        //authorText.setText(author + ": ");
         // If the message was sent by this user, color it differently
+
         if (author != null && author.equals(mUsername)) {
-            authorText.setTextColor(Color.RED);
+
+            ((TextView) view.findViewById(R.id.message)).setText(chat.getMessage());
+
+            if (((TextView) ((SalaActivity) view.getContext()).findViewById(R.id.friendLabel)).getText().equals("")) {
+                ((TextView) ((SalaActivity) view.getContext()).findViewById(R.id.friendLabel)).setText(author);
+            }
+
+            setAlignment(view, false);
+
         } else {
-            authorText.setTextColor(Color.BLUE);
+
+            ((TextView) view.findViewById(R.id.message)).setText(chat.getMessage());
+
+            if (((TextView) ((SalaActivity) view.getContext()).findViewById(R.id.meLbl)).getText().equals("")) {
+                ((TextView) ((SalaActivity) view.getContext()).findViewById(R.id.meLbl)).setText(author);
+            }
+
+            setAlignment(view, true);
         }
-        ((TextView) view.findViewById(R.id.message)).setText(chat.getMessage());
+        String[] t = chat.getQuando().split(" ")[0].split("-");
+        ((TextView) view.findViewById(R.id.txtInfo)).setText(t[2]+"/"+t[1]+"/"+t[0]+" "+chat.getQuando().split(" ")[1]);
+
     }
+
+
+    private void setAlignment(View v, boolean isMe) {
+        TextView message = ((TextView)v.findViewById(R.id.message));
+        LinearLayout contentWithBackground = ((LinearLayout)v.findViewById(R.id.contentWithBackground));
+        LinearLayout content = ((LinearLayout)v.findViewById(R.id.content));
+        TextView txtInfo = ((TextView)v.findViewById(R.id.txtInfo));
+        if (!isMe) {
+            contentWithBackground.setBackgroundResource(R.drawable.in_message_bg);
+
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) contentWithBackground.getLayoutParams();
+            layoutParams.gravity = Gravity.RIGHT;
+            contentWithBackground.setLayoutParams(layoutParams);
+
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) content.getLayoutParams();
+            lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+            lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            content.setLayoutParams(lp);
+            layoutParams = (LinearLayout.LayoutParams) message.getLayoutParams();
+            layoutParams.gravity = Gravity.RIGHT;
+            message.setLayoutParams(layoutParams);
+
+            layoutParams = (LinearLayout.LayoutParams) txtInfo.getLayoutParams();
+            layoutParams.gravity = Gravity.RIGHT;
+            txtInfo.setLayoutParams(layoutParams);
+        } else {
+            contentWithBackground.setBackgroundResource(R.drawable.out_message_bg);
+
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) contentWithBackground.getLayoutParams();
+            layoutParams.gravity = Gravity.LEFT;
+            contentWithBackground.setLayoutParams(layoutParams);
+
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) content.getLayoutParams();
+            lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+            lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            content.setLayoutParams(lp);
+            layoutParams = (LinearLayout.LayoutParams) message.getLayoutParams();
+            layoutParams.gravity = Gravity.LEFT;
+            message.setLayoutParams(layoutParams);
+
+            layoutParams = (LinearLayout.LayoutParams) txtInfo.getLayoutParams();
+            layoutParams.gravity = Gravity.LEFT;
+            txtInfo.setLayoutParams(layoutParams);
+        }
+    }
+
 }
