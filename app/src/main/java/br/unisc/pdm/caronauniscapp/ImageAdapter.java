@@ -32,20 +32,24 @@ public class ImageAdapter extends BaseAdapter {
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
-
-        imageView = new ImageView(mContext);
-        if (position<7) {
-            imageView.setLayoutParams(new GridView.LayoutParams(70, 58));
-        }else{
-            imageView.setLayoutParams(new GridView.LayoutParams(62, 58));
-        }
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imageView.setPadding(0, 0, 0, 0);
-
+        //if (convertView == null) {
+            // if it's not recycled, initialize some attributes
+            imageView = new ImageView(mContext);
+            if (position<7) {
+                imageView.setLayoutParams(new GridView.LayoutParams(70, 58));
+            }else{
+                imageView.setLayoutParams(new GridView.LayoutParams(62, 58));
+            }
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imageView.setPadding(0, 0, 0, 0);
+        //} else {
+        //    imageView = (ImageView) convertView;
+        //}
         imageView.setImageResource(mThumbIds[position]);
         return imageView;
     }
 
+    // references to our images
     public Integer[] mThumbIds = {
             R.drawable.dom, R.drawable.seg,
             R.drawable.ter, R.drawable.qua,
