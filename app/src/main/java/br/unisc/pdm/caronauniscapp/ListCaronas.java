@@ -100,7 +100,7 @@ public class ListCaronas extends BaseAdapter implements ListAdapter {
             btnEsta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    btnEsta.setVisibility(View.GONE);
+                    btnEsta.setVisibility(View.INVISIBLE);
                     new RotaWebDao((CaronasActivity) v.getContext()).caronasEscolher(ag_fornece.get(position), ag_recebe.get(position), dist.get(position));
                     //((CaronasActivity) v.getContext()).finish();
                 }
@@ -108,7 +108,7 @@ public class ListCaronas extends BaseAdapter implements ListAdapter {
             switch(status.get(position)){
                 case -1:
                     tvStatus.setText("Status: Cancelado");
-                    btnEsta.setVisibility(View.GONE);
+                    btnEsta.setVisibility(View.INVISIBLE);
                     break;
                 case 0:
                     tvStatus.setText("Status: Escolher");
@@ -116,11 +116,11 @@ public class ListCaronas extends BaseAdapter implements ListAdapter {
                     break;
                 case 1:
                     tvStatus.setText("Status: Aceitar");
-                    btnEsta.setVisibility(View.GONE);
+                    btnEsta.setVisibility(View.INVISIBLE);
                     break;
                 case 2:
                     tvStatus.setText("Status: Aprovado");
-                    btnEsta.setVisibility(View.GONE);
+                    btnEsta.setVisibility(View.INVISIBLE);
                     break;
             }
             final Button btnCaronaMapa = (Button) view.findViewById(R.id.btnCaronaMapa);
@@ -140,7 +140,7 @@ public class ListCaronas extends BaseAdapter implements ListAdapter {
             btnAceitar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    btnAceitar.setVisibility(View.GONE);
+                    btnAceitar.setVisibility(View.INVISIBLE);
                     new RotaWebDao((CaronasActivity) v.getContext()).caronasAceitar(ag_fornece.get(position), ag_recebe.get(position), dist.get(position));
                     //((CaronasActivity) v.getContext()).finish();
                 }
@@ -148,7 +148,7 @@ public class ListCaronas extends BaseAdapter implements ListAdapter {
             btnRecusar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    btnRecusar.setVisibility(View.GONE);
+                    btnRecusar.setVisibility(View.INVISIBLE);
                     new RotaWebDao((CaronasActivity) v.getContext()).caronasRecusar(ag_fornece.get(position), ag_recebe.get(position), dist.get(position));
                     //((CaronasActivity) v.getContext()).finish();
                 }
@@ -156,8 +156,8 @@ public class ListCaronas extends BaseAdapter implements ListAdapter {
             switch(status.get(position)){
                 case -1:
                     tvStatus.setText("Status: Cancelado");
-                    btnAceitar.setVisibility(View.GONE);
-                    btnRecusar.setVisibility(View.GONE);
+                    btnAceitar.setVisibility(View.INVISIBLE);
+                    btnRecusar.setVisibility(View.INVISIBLE);
                     break;
                 case 0:
                     tvStatus.setText("Status: Escolher");
@@ -171,8 +171,8 @@ public class ListCaronas extends BaseAdapter implements ListAdapter {
                     break;
                 case 2:
                     tvStatus.setText("Status: Aprovado");
-                    btnAceitar.setVisibility(View.GONE);
-                    btnRecusar.setVisibility(View.GONE);
+                    btnAceitar.setVisibility(View.INVISIBLE);
+                    btnRecusar.setVisibility(View.INVISIBLE);
                     break;
             }
             final Button btnCaronaMapa = (Button) view.findViewById(R.id.btnCaronaMapa);
