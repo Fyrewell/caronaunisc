@@ -11,6 +11,8 @@ import android.view.View;
  * Activity inicial, responsavel por chamar tela de Login caso usuario ja tenha se cadastrado
  * ou Tela de input de dados do usuario para cadastro.
  *
+ * Diego, Gabriel, Rafael
+ *
  */
 public class Lauch extends Activity {
 

@@ -30,6 +30,9 @@ import br.unisc.pdm.caronauniscapp.database.Usuario;
 import br.unisc.pdm.caronauniscapp.webservice.RotaTela;
 import br.unisc.pdm.caronauniscapp.webservice.RotaWebDao;
 
+/**
+ * Diego, Gabriel, Rafael
+ */
 public class CaronasActivity extends TabActivity implements RotaTela {
 
     ListView listView;

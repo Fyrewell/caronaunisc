@@ -16,7 +16,7 @@ import org.json.JSONObject;
 /**
  * Metodos webservice para os servicos relativos a agendamento de caronas.
  *
- * Created by Diego on 17/10/2015.
+ * Created by Diego, Gabriele Rafael on 17/10/2015.
  */
 public class AgendaWebDao {
 

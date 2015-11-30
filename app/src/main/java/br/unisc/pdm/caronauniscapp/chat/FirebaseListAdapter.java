@@ -15,8 +15,9 @@ import com.firebase.client.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * @author greg
+ * @author Diego, Gabriel, Rafael
  * @since 6/21/13
  *
  * This class is a generic way of backing an Android ListView with a Firebase location.

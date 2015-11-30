@@ -1,7 +1,7 @@
 package br.unisc.pdm.caronauniscapp.chat;
 
 /**
- * @author greg
+ * @author Diego, Gabriel, Rafael
  * @since 6/21/13
  */
 public class Chat {

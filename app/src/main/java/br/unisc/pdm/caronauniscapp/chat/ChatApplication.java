@@ -2,8 +2,9 @@ package br.unisc.pdm.caronauniscapp.chat;
 
 import com.firebase.client.Firebase;
 
+
 /**
- * @author Jenny Tong (mimming)
+ * @author Diego, Gabriel, Rafael
  * @since 12/5/14
  *
  * Initialize Firebase with the application context. This must happen before the client is used.

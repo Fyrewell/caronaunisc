@@ -18,6 +18,9 @@ import org.json.JSONObject;
 import br.unisc.pdm.caronauniscapp.webservice.AgendaTela;
 import br.unisc.pdm.caronauniscapp.webservice.AgendaWebDao;
 
+/**
+ * Diego, Gabriel, Rafael
+ */
 public class Agenda extends ActionBarActivity implements AgendaTela {
 
     private AgendaWebDao dao = new AgendaWebDao(this);

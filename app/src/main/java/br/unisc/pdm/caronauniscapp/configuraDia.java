@@ -26,6 +26,8 @@ import br.unisc.pdm.caronauniscapp.webservice.AgendaWebDao;
  *
  * Usuario tem tambem a opcao de copiar a agenda da semana anteerior para repetir as mesmas
  * marcacoes ja feitas anteriormente.
+ *
+ * Created by Diego, Gabriel, Rafael
  */
 public class configuraDia extends ActionBarActivity implements AgendaTela {
 

@@ -34,7 +34,7 @@ import br.unisc.pdm.caronauniscapp.webservice.UsuarioWebDao;
 /**
  * Recebe informacoes da tela de informacoes de usuario para a criacao ou edicao de um perfil.
  *
- * Created by Diego on 05/10/2015.
+ * Created by Diego, Gabriel, Rafael on 05/10/2015.
  */
 public class FormUsuario extends ActionBarActivity implements UsuarioTela {
 

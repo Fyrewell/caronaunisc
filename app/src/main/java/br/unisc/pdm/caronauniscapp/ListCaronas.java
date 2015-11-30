@@ -21,7 +21,7 @@ import br.unisc.pdm.caronauniscapp.chat.SalaActivity;
 import br.unisc.pdm.caronauniscapp.webservice.RotaWebDao;
 
 /**
- * Created by Diego on 11/11/2015.
+ * Created by Diego, Gabriel, Rafael on 11/11/2015.
  */
 public class ListCaronas extends BaseAdapter implements ListAdapter {
 

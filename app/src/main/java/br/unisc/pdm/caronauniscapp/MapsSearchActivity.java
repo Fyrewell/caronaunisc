@@ -47,6 +47,8 @@ import br.unisc.pdm.caronauniscapp.webservice.RotaWebDao;
 /**
  * Metodos usados para a manipulacao do mapa e da rota, setando o mapa,
  * buscando o ponto que o usuario marcar e salvando a rota marcada.
+ *
+ * Diego, Gabriel, Rafael
  */
 public class MapsSearchActivity extends FragmentActivity implements RotaTela{
 

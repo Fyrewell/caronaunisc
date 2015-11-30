@@ -26,7 +26,7 @@ import br.unisc.pdm.caronauniscapp.database.Usuario;
 /**
  * Metodos webservice referentes a Usuario: criacao de usuario, edicao, buscas.
  *
- * Created by Diego on 05/10/2015.
+ * Created by Diego, Gabriel, Rafael on 05/10/2015.
  */
 public class UsuarioWebDao {
     public Context context;

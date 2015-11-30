@@ -18,8 +18,9 @@ import java.util.ArrayList;
 
 import br.unisc.pdm.caronauniscapp.R;
 
+
 /**
- * Created by Diego on 27/09/2015.
+ * @author Diego, Gabriel, Rafael
  */
 public class ListPessoas extends BaseAdapter implements ListAdapter {
 

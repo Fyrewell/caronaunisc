@@ -24,6 +24,11 @@ import java.util.Random;
 
 import br.unisc.pdm.caronauniscapp.R;
 
+
+/**
+ * @author Diego, Gabriel, Rafael
+ *
+ */
 public class SalaActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL

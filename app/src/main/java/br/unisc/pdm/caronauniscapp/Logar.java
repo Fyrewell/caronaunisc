@@ -15,6 +15,8 @@ import br.unisc.pdm.caronauniscapp.webservice.UsuarioWebDao;
 
 /**
  * Recebe login (matricula) e senha de usuario ja cadastrado e realiza o login no aplicativo.
+ *
+ * Diego, Gabriel, Rafael
  */
 public class Logar extends Activity implements UsuarioTela {
 

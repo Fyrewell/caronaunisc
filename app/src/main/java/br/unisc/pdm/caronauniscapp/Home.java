@@ -15,6 +15,8 @@ import br.unisc.pdm.caronauniscapp.chat.SearchActivity;
 /**
  * Activity inicial apos feito o login no aplicativo.
  * Acesso a todas as funcionalidades atraves de shortcuts para perfil, agenda ou rota.
+ *
+ * Diego, Gabriel, Rafael
  */
 public class Home extends AppCompatActivity{
 

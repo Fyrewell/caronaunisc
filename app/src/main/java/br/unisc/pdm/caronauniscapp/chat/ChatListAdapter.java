@@ -1,10 +1,8 @@
 package br.unisc.pdm.caronauniscapp.chat;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,8 +11,9 @@ import com.firebase.client.Query;
 
 import br.unisc.pdm.caronauniscapp.R;
 
+
 /**
- * @author greg
+ * @author Diego, Gabriel, Rafael
  * @since 6/21/13
  *
  * This class is an example of how to use FirebaseListAdapter. It uses the <code>Chat</code> class to encapsulate the
